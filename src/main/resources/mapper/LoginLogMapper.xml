@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.admin.mapper.LoginLogMapper">
+    <sql id="baseQuery">
+        SELECT *
+        FROM login_log
+    </sql>
+    <insert id="insert" parameterType="LoginLog">
+        INSERT INTO login_log
+        <trim prefix="(" suffixOverrides="," suffix=")">
+            <if test="username != null and username != ''">username,</if>
+            <if test="ip != null and ip != ''">ip,</if>
+            <if test="location != null and location != ''">location,</if>
+            <if test="os != null and os != ''">os,</if>
+            <if test="browser != null and browser != ''">browser,</if>
+            <if test="msg != null and msg != ''">msg,</if>
+            <if test="status != null and status != ''">status,</if>
+        </trim>
+        VALUES
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="username != null and username != ''">#{username},</if>
+            <if test="ip != null and ip != ''">#{ip},</if>
+            <if test="location != null and location != ''">#{location},</if>
+            <if test="os != null and os != ''">#{os},</if>
+            <if test="browser != null and browser != ''">#{browser},</if>
+            <if test="msg != null and msg != ''">#{msg},</if>
+            <if test="status != null and status != ''">#{status},</if>
+        </trim>
+    </insert>
+    <select id="getLoginLogList" parameterType="LoginLog" resultType="LoginLog">
+        <include refid="baseQuery"/>
+        <where>
+            <if test="id  > 0">AND id =#{id},</if>
+            <if test="username != null and username != ''">AND username = #{username},</if>
+            <if test="ip != null and ip != ''">AND ip = #{ip},</if>
+            <if test="location != null and location != ''">AND location = #{location},</if>
+            <if test="os != null and os != ''">AND os = #{os},</if>
+            <if test="browser != null and browser != ''">AND browser = #{browser},</if>
+            <if test="msg != null and msg != ''">AND msg = #{msg},</if>
+            <if test="status != null and status != ''">AND status = #{status},</if>
+        </where>
+        ORDER by id DESC
+    </select>
+</mapper>

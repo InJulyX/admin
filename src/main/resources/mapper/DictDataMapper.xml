@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.admin.mapper.DictDataMapper">
+    <sql id="baseQuery">
+        SELECT *
+        FROM dict_data
+    </sql>
+    <select id="selectDictDataListByDictType" parameterType="String" resultType="DictData">
+        <include refid="baseQuery"/>
+        WHERE status = '0'
+        AND dict_type = #{dictType}
+    </select>
+    <select id="getDictData" parameterType="DictData" resultType="DictData">
+        <include refid="baseQuery"/>
+        <where>
+            <if test="dictCode > 0">AND dict_code = #{dictCode}</if>
+            <if test="dictSort > 0">AND dict_dort = #{dictSort}</if>
+            <if test="dictLabel != null and dictLabel != ''">AND dict_label=#{dictLabel}</if>
+            <if test="dictType != null and dictType != ''">AND dict_type=#{dictType}</if>
+            <if test="dictValue != null and dictValue != ''">AND dict_value=#{dictValue}</if>
+            <if test="cssClass != null and cssClass != ''">AND css_class=#{cssClass}</if>
+            <if test="listClass != null and listClass != ''">AND listClass=#{listClass}</if>
+            <if test="isDefault != null and isDefault != ''">AND is_default=#{isDefault}</if>
+            <if test="status != null and status != ''">AND status=#{status}</if>
+            <if test="createBy != null and createBy != ''">AND create_by=#{createBy}</if>
+            <if test="updateBy != null and updateBy != ''">AND update_by=#{updateBy}</if>
+        </where>
+    </select>
+    <select id="getDictDataList" parameterType="DictData" resultType="DictData">
+        <include refid="baseQuery"/>
+        <where>
+            <if test="dictCode > 0">AND dict_code = #{dictCode}</if>
+            <if test="dictSort > 0">AND dict_dort = #{dictSort}</if>
+            <if test="dictLabel != null and dictLabel != ''">AND dict_label=#{dictLabel}</if>
+            <if test="dictType != null and dictType != ''">AND dict_type=#{dictType}</if>
+            <if test="dictValue != null and dictValue != ''">AND dict_value=#{dictValue}</if>
+            <if test="cssClass != null and cssClass != ''">AND css_class=#{cssClass}</if>
+            <if test="listClass != null and listClass != ''">AND listClass=#{listClass}</if>
+            <if test="isDefault != null and isDefault != ''">AND is_default=#{isDefault}</if>
+            <if test="status != null and status != ''">AND status=#{status}</if>
+            <if test="createBy != null and createBy != ''">AND create_by=#{createBy}</if>
+            <if test="updateBy != null and updateBy != ''">AND update_by=#{updateBy}</if>
+        </where>
+        AND status = '0'
+    </select>
+    <select id="test" resultType="DictData">
+        SELECT *
+        FROM dict_data
+    </select>
+    <insert id="insert" parameterType="dictData">
+        INSERT INTO dict_data
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="dictCode > 0">dict_code,</if>
+            <if test="dictSort > 0">dict_sort,</if>
+            <if test="dictLabel != null and dictLabel != ''">dict_label,</if>
+            <if test="dictType != null and dictType != ''">dict_type,</if>
+            <if test="dictValue != null and dictValue != ''">dict_value,</if>
+            <if test="cssClass != null and cssClass != ''">css_class,</if>
+            <if test="listClass != null and listClass != ''">list_class,</if>
+            <if test="isDefault != null and isDefault != ''">is_default,</if>
+            <if test="status != null and status != ''">status,</if>
+            <if test="createBy != null and createBy != ''">create_by,</if>
+            <if test="updateBy != null and updateBy != ''">update_by,</if>
+            <if test="remark != null and remark != ''">remark,</if>
+            update_time,
+        </trim>
+        VALUES
+        <trim prefix="(" suffixOverrides="," suffix=")">
+            <if test="dictCode > 0">#{dictCode},</if>
+            <if test="dictSort > 0">#{dictSort},</if>
+            <if test="dictLabel != null and dictLabel != ''">#{dictLabel},</if>
+            <if test="dictType != null and dictType != ''">#{dictType},</if>
+            <if test="dictValue != null and dictValue != ''">#{dictValue},</if>
+            <if test="cssClass != null and cssClass != ''">#{cssClass},</if>
+            <if test="listClass != null and listClass != ''">#{listClass},</if>
+            <if test="isDefault != null and isDefault != ''">#{isDefault},</if>
+            <if test="status != null and status != ''">#{status},</if>
+            <if test="createBy != null and createBy != ''">#{createBy},</if>
+            <if test="updateBy != null and updateBy != ''">#{updateBy},</if>
+            <if test="remark != null and remark != ''">#{remark},</if>
+            CURRENT_TIMESTAMP
+        </trim>
+    </insert>
+    <delete id="delete" parameterType="Long">
+        DELETE
+        FROM dict_data
+        WHERE dict_code = #{dictCode}
+    </delete>
+</mapper>

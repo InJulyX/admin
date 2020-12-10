@@ -1,0 +1,91 @@
+{
+  "code": 200,
+  "data": [
+    {
+      "name": "System",
+      "path": "/system",
+      "hidden": false,
+      "redirect": "noRedirect",
+      "component": "Layout",
+      "alwaysShow": true,
+      "meta": {
+        "title": "系统管理",
+        "icon": "system",
+        "noCache": false
+      },
+      "children": [
+        {
+          "name": "User",
+          "path": "user",
+          "hidden": false,
+          "component": "system/user/index",
+          "meta": {
+            "title": "用户管理",
+            "icon": "user",
+            "noCache": false
+          }
+        },
+        {
+          "name": "Menu",
+          "path": "menu",
+          "hidden": false,
+          "component": "system/menu/index",
+          "meta": {
+            "title": "菜单管理",
+            "icon": "tree-table",
+            "noCache": false
+          }
+        },
+        {
+          "name": "Dict",
+          "path": "dict",
+          "hidden": false,
+          "component": "system/dict/index",
+          "meta": {
+            "title": "字典管理",
+            "icon": "build",
+            "noCache": false
+          }
+        }
+      ]
+    },
+    {
+      "name": "Log",
+      "path": "/log",
+      "hidden": false,
+      "redirect": "noRedirect",
+      "component": "ParentView",
+      "alwaysShow": true,
+      "meta": {
+        "title": "日志管理",
+        "icon": "log",
+        "noCache": false
+      },
+      "children": [
+        {
+          "name": "Opera",
+          "path": "opera",
+          "hidden": false,
+          "component": "log/OperaLog",
+          "meta": {
+            "title": "操作日志",
+            "icon": "list",
+            "noCache": true
+          }
+        },
+        {
+          "name": "Login",
+          "path": "login",
+          "hidden": false,
+          "component": "monitor/logininfor/index",
+          "meta": {
+            "title": "登录日志",
+            "icon": "log",
+            "noCache": true
+          }
+        }
+      ]
+    }
+  ],
+  "message": "请求成功"
+}

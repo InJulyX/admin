@@ -1,0 +1,33 @@
+server:
+  port: ${SERVER_PORT:9999}
+  servlet:
+    context-path: /dev-api
+spring:
+  main:
+    banner-mode: off
+  application:
+    name: botAdmin
+  datasource:
+    username: ${DB_USERNAME:postgres}
+    password: ${DB_PASSWORD:123456}
+    url: jdbc:postgresql://www.51ops.xyz:5432/admin
+    driver-class-name: org.postgresql.Driver
+  aop:
+    auto: true
+mybatis:
+  mapper-locations: classpath:mapper/**Mapper.xml
+  type-aliases-package: com.admin.entity
+  check-config-location: true
+  executor-type: reuse
+
+  configuration:
+    map-underscore-to-camel-case: true
+    cache-enabled: true
+logging:
+  level:
+    root: info
+pagehelper:
+  params: count=countSql
+  reasonable: true
+  support-methods-arguments: true
+  helper-dialect: postgresql

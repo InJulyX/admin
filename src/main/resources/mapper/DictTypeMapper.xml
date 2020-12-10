@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.admin.mapper.DictTypeMapper">
+    <sql id="baseQuery">
+        SELECT *
+        FROM dict_type
+    </sql>
+    <select id="getDictTypeAll" resultType="DictType">
+        SELECT *
+        FROM dict_type
+        WHERE status = '0'
+    </select>
+    <insert id="insert" parameterType="DictType">
+        INSERT INTO dict_type
+        <trim prefix="(" suffixOverrides="," suffix=")">
+            <if test="dictId != null and dictId >0">dict_id,</if>
+            <if test="dictName != null and dictName != ''">dict_name,</if>
+            <if test="dictType != null and dictType != ''">dict_type,</if>
+            <if test="remark != null and remark != ''">remark,</if>
+            <if test="status != null and status != ''">status,</if>
+            <if test="createBy != null and createBy != ''">create_by,</if>
+            <if test="updateBy != null and updateBy != ''">update_by,</if>
+        </trim>
+        VALUES
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="dictId != null and dictId >0">#{dictId},</if>
+            <if test="dictName != null and dictName != ''">#{dictName},</if>
+            <if test="dictType != null and dictType != ''">#{dictType},</if>
+            <if test="remark != null and remark != ''">#{remark},</if>
+            <if test="status != null and status != ''">#{status},</if>
+            <if test="createBy != null and createBy != ''">#{createBy},</if>
+            <if test="updateBy != null and updateBy != ''">#{updateBy},</if>
+        </trim>
+    </insert>
+    <delete id="deleteByDictId" parameterType="Long">
+        DELETE
+        FROM dict_type
+        WHERE dict_id = #{dictId}
+    </delete>
+    <select id="getDictTypeByDictId" parameterType="Long" resultType="DictType">
+        SELECT *
+        FROM dict_type
+        WHERE dict_id = #{dictId}
+    </select>
+    <select id="getDictType" parameterType="DictType" resultType="DictType">
+        <include refid="baseQuery"/>
+        <where>
+            <if test="dictId > 0">AND dict_id = #{dictId}</if>
+            <if test="dictName != null and dictName != ''">AND dict_name = #{dictName}</if>
+            <if test="dictType != null and dictType != ''">AND dict_type = #{dictType}</if>
+            <if test="status != null and status != ''">AND status = #{status}</if>
+            <if test="createBy != null and createBy != ''">AND create_by = #{createBy}</if>
+            <if test="updateBy != null and updateBy != ''">AND update_by = #{updateBy}</if>
+        </where>
+    </select>
+    <select id="getDictTypeList" parameterType="DictType" resultType="DictType">
+        <include refid="baseQuery"/>
+        <where>
+            <if test="dictId > 0">AND dict_id = #{dictId}</if>
+            <if test="dictName != null and dictName != ''">AND dict_name = #{dictName}</if>
+            <if test="dictType != null and dictType != ''">AND dict_type = #{dictType}</if>
+            <if test="status != null and status != ''">AND status = #{status}</if>
+            <if test="createBy != null and createBy != ''">AND create_by = #{createBy}</if>
+            <if test="updateBy != null and updateBy != ''">AND update_by = #{updateBy}</if>
+        </where>
+    </select>
+</mapper>
