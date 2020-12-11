@@ -1,5 +1,6 @@
 package com.admin.entity;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.Data;
 
 import java.sql.Timestamp;
@@ -14,6 +15,7 @@ public class LoginLog {
     private String browser;
     private String status;
     private String msg;
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     private Timestamp loginTime;
 
     @Override

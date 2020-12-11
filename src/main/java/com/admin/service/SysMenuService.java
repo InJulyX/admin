@@ -1,10 +1,8 @@
 package com.admin.service;
 
-import com.admin.entity.MetaVO;
-import com.admin.entity.RouterVO;
-import com.admin.entity.SysMenu;
-import com.admin.entity.SysUser;
+import com.admin.entity.*;
 import com.admin.mapper.SysMenuMapper;
+import com.admin.mapper.SysRoleMapper;
 import com.admin.utils.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -13,14 +11,18 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 public class SysMenuService {
     final
     SysMenuMapper sysMenuMapper;
+    final
+    SysRoleMapper sysRoleMapper;
 
-    public SysMenuService(SysMenuMapper sysMenuMapper) {
+    public SysMenuService(SysMenuMapper sysMenuMapper, SysRoleMapper sysRoleMapper) {
         this.sysMenuMapper = sysMenuMapper;
+        this.sysRoleMapper = sysRoleMapper;
     }
 
     public List<SysMenu> selectMenuTreeByUserId(Long userId) {
@@ -143,11 +145,22 @@ public class SysMenuService {
     }
 
     public List<SysMenu> getSysMenuList(SysMenu sysMenu, Long userId) {
-        return sysMenuMapper.getSysMenuList(sysMenu);
+        List<SysMenu> sysMenuList;
+        if (SysUser.isAdmin(userId)) {
+            sysMenuList = sysMenuMapper.getSysMenuList(sysMenu);
+        } else {
+            sysMenu.getParams().put("userId", userId);
+            sysMenuList = sysMenuMapper.getSysMenuListByUserId(sysMenu);
+        }
+        return sysMenuList;
     }
 
     public List<SysMenu> getSysMenuList(SysMenu sysMenu) {
         return sysMenuMapper.getSysMenuList(sysMenu);
+    }
+
+    public List<SysMenu> getSysMenuList(Long userId) {
+        return getSysMenuList(new SysMenu(), userId);
     }
 
     public int insertMenu(SysMenu sysMenu) {
@@ -157,4 +170,36 @@ public class SysMenuService {
     public int deleteByMenuId(Long menuId) {
         return sysMenuMapper.deleteByMenuId(menuId);
     }
+
+    public List<TreeSelect> buildSysMenuTreeSelect(List<SysMenu> sysMenuList) {
+        List<SysMenu> menuList = buildSysMenuTree(sysMenuList);
+        return menuList.stream().map(TreeSelect::new).collect(Collectors.toList());
+    }
+
+    public List<SysMenu> buildSysMenuTree(List<SysMenu> menus) {
+        List<SysMenu> returnList = new ArrayList<>();
+        List<Long> tempList = new ArrayList<>();
+        for (SysMenu dept : menus) {
+            tempList.add(dept.getMenuId());
+        }
+        for (SysMenu menu : menus) {
+            // 如果是顶级节点, 遍历该父节点的所有子节点
+            if (!tempList.contains(menu.getParentId())) {
+                recursionFn(menus, menu);
+                returnList.add(menu);
+            }
+        }
+        if (returnList.isEmpty()) {
+            returnList = menus;
+        }
+        return returnList;
+    }
+
+    public List<Integer> getSysMenuListByRoleId(Long roleId) {
+        SysRole sysRole = new SysRole();
+        sysRole.setId(roleId);
+        SysRole role = sysRoleMapper.getSysRole(sysRole);
+        return sysMenuMapper.getSysMenuListByRoleId(roleId, role.isMenuCheckStrictly());
+    }
+
 }

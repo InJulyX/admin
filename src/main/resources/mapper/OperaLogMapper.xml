@@ -3,11 +3,86 @@
         PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.admin.mapper.OperaLogMapper">
-
+    <sql id="baseQuery">
+        SELECT opera_id,
+               title,
+               business_type,
+               method,
+               request_method,
+               operator_type,
+               opera_name,
+               open_url,
+               opera_ip,
+               opera_location,
+               opera_param,
+               json_result,
+               status,
+               error_msg,
+               opera_time
+        FROM opera_log
+    </sql>
+    <resultMap id="baseResult" type="OperaLog">
+        <id property="operaId" column="opera_id" javaType="Long" jdbcType="BIGINT"/>
+        <result property="title" column="title" jdbcType="VARCHAR" javaType="String"/>
+        <result property="businessType" column="business_type" jdbcType="INTEGER" javaType="Integer"/>
+        <result property="method" column="method" jdbcType="VARCHAR" javaType="String"/>
+        <result property="requestMethod" column="request_method" jdbcType="VARCHAR" javaType="String"/>
+        <result property="operatorType" column="operator_type" jdbcType="INTEGER" javaType="Integer"/>
+        <result property="operaName" column="opera_name" jdbcType="VARCHAR" javaType="String"/>
+        <result property="openUrl" column="open_url" jdbcType="VARCHAR" javaType="String"/>
+        <result property="operaIp" column="opera_ip" jdbcType="VARCHAR" javaType="String"/>
+        <result property="operaLocation" column="opera_location" jdbcType="VARCHAR" javaType="String"/>
+        <result property="operaParam" column="opera_param" jdbcType="VARCHAR" javaType="String"/>
+        <result property="jsonResult" column="json_result" jdbcType="VARCHAR" javaType="String"/>
+        <result property="status" column="status" jdbcType="INTEGER" javaType="Integer"/>
+        <result property="errorMsg" column="error_msg" jdbcType="VARCHAR" javaType="String"/>
+        <result property="operaTime" column="opera_time" jdbcType="TIMESTAMP" javaType="java.sql.Timestamp"/>
+    </resultMap>
     <insert id="insert" parameterType="OperaLog">
         INSERT INTO opera_log(title, business_type, method, request_method, operator_type, opera_name,
                               open_url, opera_ip, opera_location, opera_param, json_result, status, error_msg)
         VALUES (#{title}, #{businessType}, #{method}, #{requestMethod}, #{operatorType}, #{operaName},
                 #{openUrl}, #{operaIp}, #{operaLocation}, #{operaParam}, #{jsonResult}, #{status}, #{errorMsg})
     </insert>
+    <select id="getOperaLog" parameterType="OperaLog" resultMap="baseResult">
+        <include refid="baseQuery"/>
+        <where>
+            <if test="operaId != null and operaId >0">AND opera_id = #{operaId}</if>
+            <if test="operatorType != null and operatorType >0">AND operator_type = #{operatorType}</if>
+            <if test="businessType != null and businessType >0">AND business_type = #{businessType}</if>
+            <if test="title != null and title != ''">AND title = #{title}</if>
+            <if test="method != null and method != ''">AND method = #{title}</if>
+            <if test="requestMethod != null and requestMethod != ''">AND request_method = #{requestMethod}</if>
+            <if test="operaName != null and operaName != ''">AND opera_name = #{operaName}</if>
+            <if test="openUrl != null and openUrl != ''">AND open_url = #{openUrl}</if>
+            <if test="operaIp != null and operaIp != ''">AND opera_ip = #{operaIp}</if>
+            <if test="operaLocation != null and operaLocation != ''">AND opera_location = #{operaLocation}</if>
+            <if test="operaParam != null and operaParam != ''">AND opera_param = #{operaParam}</if>
+            <if test="jsonResult != null and jsonResult != ''">AND json_result = #{jsonResult}</if>
+            <if test="status != null and status > 0">AND status = #{status}</if>
+            <if test="errorMsg != null and errorMsg != ''">AND error_msg = #{errorMsg}</if>
+        </where>
+        ORDER BY opera_id DESC
+    </select>
+    <select id="getOperaLogList" parameterType="OperaLog" resultMap="baseResult">
+        <include refid="baseQuery"/>
+        <where>
+            <if test="operaId != null and operaId >0">AND opera_id = #{operaId}</if>
+            <if test="operatorType != null and operatorType >0">AND operator_type = #{operatorType}</if>
+            <if test="businessType != null and businessType >0">AND business_type = #{businessType}</if>
+            <if test="title != null and title != ''">AND title = #{title}</if>
+            <if test="method != null and method != ''">AND method = #{title}</if>
+            <if test="requestMethod != null and requestMethod != ''">AND request_method = #{requestMethod}</if>
+            <if test="operaName != null and operaName != ''">AND opera_name = #{operaName}</if>
+            <if test="openUrl != null and openUrl != ''">AND open_url = #{openUrl}</if>
+            <if test="operaIp != null and operaIp != ''">AND opera_ip = #{operaIp}</if>
+            <if test="operaLocation != null and operaLocation != ''">AND opera_location = #{operaLocation}</if>
+            <if test="operaParam != null and operaParam != ''">AND opera_param = #{operaParam}</if>
+            <if test="jsonResult != null and jsonResult != ''">AND json_result = #{jsonResult}</if>
+            <if test="status != null and status > 0">AND status = #{status}</if>
+            <if test="errorMsg != null and errorMsg != ''">AND error_msg = #{errorMsg}</if>
+        </where>
+        ORDER BY opera_id DESC
+
+    </select>
 </mapper>

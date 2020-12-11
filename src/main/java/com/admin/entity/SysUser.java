@@ -2,6 +2,7 @@ package com.admin.entity;
 
 import lombok.Data;
 
+import java.sql.Timestamp;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -13,6 +14,14 @@ public class SysUser {
     private Boolean isActive;
     private Set<String> roles;
     private String avatar;
+    private String status;
+    private Timestamp createTime;
+    private Timestamp updateTime;
+    private String nickName;
+    private String phoneNumber;
+    private String email;
+    private String createBy;
+    private String updateBy;
 
     public SysUser() {
         Set<String> roles = new HashSet<>();

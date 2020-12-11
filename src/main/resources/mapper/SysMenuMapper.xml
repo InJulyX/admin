@@ -3,7 +3,7 @@
         PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.admin.mapper.SysMenuMapper">
-    <resultMap id="BaseResult" type="SysMenu">
+    <resultMap id="baseResult" type="SysMenu">
         <id property="menuId" column="menu_id"/>
         <result property="menuName" column="menu_name"/>
         <result property="parentName" column="parent_name"/>
@@ -19,7 +19,7 @@
         <result property="perms" column="perms"/>
         <result property="icon" column="icon"/>
     </resultMap>
-    <select id="selectMenuTreeAll" resultMap="BaseResult">
+    <select id="selectMenuTreeAll" resultMap="baseResult">
         SELECT DISTINCT sm.menu_id,
                         sm.parent_id,
                         sm.menu_name,
@@ -39,7 +39,7 @@
           AND sm.status = '0'
         ORDER BY sm.parent_id, sm.order_num
     </select>
-    <select id="getSysMenuList" parameterType="SysMenu" resultMap="BaseResult">
+    <select id="getSysMenuList" parameterType="SysMenu" resultMap="baseResult">
         SELECT *
         FROM sys_menu
     </select>
@@ -82,4 +82,39 @@
         FROM sys_menu
         WHERE menu_id = #{menuId}
     </delete>
+    <select id="getSysMenuListByUserId" parameterType="SysMenu" resultMap="baseResult">
+        SELECT DISTINCT sm.menu_id,
+        sm.parent_id,
+        sm.menu_name,
+        sm.path,
+        sm.component,
+        sm.visible,
+        sm.status,
+        sm.perms,
+        sm.is_frame,
+        sm.is_cache,
+        sm.menu_type,
+        sm.icon,
+        sm.order_num,
+        sm.create_time
+        FROM sys_menu sm
+        LEFT JOIN sys_role_menu srm on sm.menu_id = srm.menu_id
+        LEFT JOIN sys_user_role sur on srm.role_id = sur.role_id
+        LEFT JOIN sys_role sr on sur.role_id = sr.id
+        WHERE sur.user_id = #{params.userId}
+        <if test="menuName != null and menuName != ''">AND sm.menu_name like concat('%', #{menuName},'%')</if>
+        <if test="visible != null and visible != ''">AND sm.visible = #{visible]}</if>
+        <if test="status != null and status != ''">AND sm.status = #{status}</if>
+        ORDER by sm.parent_id,sm.order_num
+    </select>
+    <select id="getSysMenuListByRoleId" resultType="Integer">
+        SELECT sm.menu_id
+        FROM sys_menu sm
+        LEFT JOIN sys_role_menu srm on sm.menu_id = srm.menu_id
+        WHERE srm.role_id = #{roleId}
+        <if test="menuCheckStrictly">AND sm.menu_id NOT IN(SELECT sm.parent_id FROM sys_menu sm INNER JOIN sys_role_menu
+            srm ON sm.menu_id = srm.menu_id AND srm.role_id = #{roleId})
+        </if>
+        ORDER by sm.parent_id,sm.order_num
+    </select>
 </mapper>

@@ -3,7 +3,9 @@ package com.admin.entity;
 import lombok.Data;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @Data
 public class SysMenu {
@@ -22,6 +24,7 @@ public class SysMenu {
     private String perms;
     private String icon;
     private List<SysMenu> children = new ArrayList<>();
+    private Map<String, Object> params;
 
     @Override
     public String toString() {
@@ -42,5 +45,12 @@ public class SysMenu {
                 ", icon='" + icon + '\'' +
                 ", children=" + children +
                 '}';
+    }
+
+    public Map<String, Object> getParams() {
+        if (params == null) {
+            params = new HashMap<>();
+        }
+        return params;
     }
 }

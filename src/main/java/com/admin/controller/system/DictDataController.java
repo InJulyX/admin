@@ -14,26 +14,30 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Slf4j
 @RestController
 @RequestMapping(value = "/system/dict/data")
 public class DictDataController extends BaseController {
-    @Autowired
+    final
     DictDataMapper dictDataMapper;
     final
     DictDataService dictDataService;
 
-    public DictDataController(DictDataService dictDataService) {
+    public DictDataController(DictDataService dictDataService, DictDataMapper dictDataMapper) {
         this.dictDataService = dictDataService;
+        this.dictDataMapper = dictDataMapper;
     }
 
     @GetMapping(value = "/type/{dictType}")
     public List<DictData> getDataInfo(@PathVariable String dictType) {
 
-//        log.error("{dictType}: {}", dictType);
-        return dictDataService.getDictDataList(dictType);
+        DictData s1 = new DictData();
+        s1.setDictType(dictType);
+        dictDataMapper.getDictDataList(s1);
+        return dictDataMapper.getDictDataList(s1);
     }
 
 

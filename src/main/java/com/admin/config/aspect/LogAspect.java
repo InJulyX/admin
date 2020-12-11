@@ -60,9 +60,9 @@ public class LogAspect {
                 operaLog.setStatus(BusinessStatus.FAIL.ordinal());
                 operaLog.setErrorMsg(StringUtils.substring(e.getMessage(), 0, 2000));
             }
-            String classname = joinPoint.getTarget().getClass().getName();
+            String className = joinPoint.getTarget().getClass().getName();
             String methodName = joinPoint.getSignature().getName();
-            operaLog.setMethod(methodName);
+            operaLog.setMethod(className+"."+methodName+"()");
             operaLog.setRequestMethod(ServletUtils.getRequest().getMethod());
             getControllerMethodDescription(joinPoint, controllerLog, operaLog);
             AsyncManager.me().execute(AsyncFactory.insertOperaLog(operaLog));
@@ -104,6 +104,7 @@ public class LogAspect {
             }
         }
         return params.toString().trim();
+
     }
 
     public boolean isFilterObject(final Object o) {

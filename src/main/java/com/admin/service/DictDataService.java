@@ -23,7 +23,7 @@ public class DictDataService {
         dictData.setDictType(dictType);
         log.error(dictData.toString());
         List<DictData> s11 =dictDataMapper.getDictDataList(dictData);
-        return dictDataMapper.getDictDataList(dictData);
+        return s11;
     }
 
     public List<DictData> getDictDataList(DictData dictData) {

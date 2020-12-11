@@ -50,4 +50,10 @@ public class BaseController {
         result.setTotal(new PageInfo(list).getTotal());
         return result;
     }
+
+    protected Result getResultInfo(int total) {
+        Result result = new Result();
+        result.setTotal(total);
+        return result;
+    }
 }

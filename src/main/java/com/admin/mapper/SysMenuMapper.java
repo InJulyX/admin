@@ -16,5 +16,10 @@ public interface SysMenuMapper {
     List<SysMenu> getSysMenuList(SysMenu sysMenu);
 
     int insert(SysMenu sysMenu);
+
     int deleteByMenuId(Long menuId);
+
+    List<SysMenu> getSysMenuListByUserId(SysMenu sysMenu);
+
+    List<Integer> getSysMenuListByRoleId(Long roleId, boolean menuCheckStrictly);
 }

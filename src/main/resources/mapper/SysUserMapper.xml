@@ -3,12 +3,21 @@
         PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.admin.mapper.SysUserMapper">
-    <sql id="baseSelect">
-        SELECT id, username, password, is_active,avatar
+    <resultMap id="baseResult" type="SysUser">
+        <id property="id" column="id" jdbcType="BIGINT" javaType="Long"/>
+        <result property="email" column="email" jdbcType="VARCHAR" javaType="String"/>
+        <result property="nickName" column="nick_name" jdbcType="VARCHAR" javaType="String"/>
+        <result property="phoneNumber" column="phone_number" jdbcType="VARCHAR" javaType="String"/>
+        <result property="status" column="status" jdbcType="VARCHAR" javaType="String"/>
+        <result property="createTime" column="create_time" javaType="java.sql.Timestamp" jdbcType="TIMESTAMP"/>
+        <result property="updateTime" column="update_time" javaType="java.sql.Timestamp" jdbcType="TIMESTAMP"/>
+    </resultMap>
+    <sql id="baseQuery">
+        SELECT *
         FROM sys_user
     </sql>
     <select id="getSysUser" resultType="SysUser">
-        <include refid="baseSelect"/>
+        <include refid="baseQuery"/>
         <where>
             <if test="id > 0">
                 AND id = #{id}
@@ -24,4 +33,49 @@
             </if>
         </where>
     </select>
+    <select id="getSysUserList" resultType="SysUser">
+        <include refid="baseQuery"/>
+        <where>
+            <if test="id != null and id > 0 ">AND id = #{id}</if>
+        </where>
+        ORDER by id DESC
+    </select>
+    <delete id="deleteSysUserById">
+        DELETE
+        FROM sys_user
+        WHERE id = #{userId}
+    </delete>
+    <select id="checkExistByUsername" parameterType="String" resultType="Integer">
+        SELECT count(1)
+        FROM sys_user
+        WHERE username = #{username}
+    </select>
+    <insert id="insert" parameterType="SysUser">
+        INSERT INTO sys_user
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="username != null and username != ''">username,</if>
+            <if test="status != null and status != ''">status,</if>
+            <if test="nickName != null and nickName != ''">nick_name,</if>
+            <if test="password != null and password != ''">password,</if>
+            <if test="isActive != null and isActive != ''">is_active,</if>
+            <if test="avatar != null and avatar != ''">avatar,</if>
+            <if test="phoneNumber != null and phoneNumber != ''">phone_number,</if>
+            <if test="email != null and email != ''">email,</if>
+            <if test="createBy != null and createBy != ''">create_by,</if>
+            <if test="updateBy != null and updateBy != ''">update_by,</if>
+        </trim>
+        VALUES
+            <trim prefix="(" suffix=")" suffixOverrides=",">
+                <if test="username != null and username != ''">#{username},</if>
+                <if test="status != null and status != ''">#{status},</if>
+                <if test="nickName != null and nickName != ''">#{nickName},</if>
+                <if test="password != null and password != ''">#{password},</if>
+                <if test="isActive != null and isActive != ''">#{isActive},</if>
+                <if test="avatar != null and avatar != ''">#{avatar},</if>
+                <if test="phoneNumber != null and phoneNumber != ''">#{phoneNumber},</if>
+                <if test="email != null and email != ''">#{email},</if>
+                <if test="createBy != null and createBy != ''">#{createBy},</if>
+                <if test="updateBy != null and updateBy != ''">#{updateBy},</if>
+            </trim>
+    </insert>
 </mapper>

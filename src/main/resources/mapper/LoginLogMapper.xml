@@ -3,8 +3,27 @@
         PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.admin.mapper.LoginLogMapper">
+    <resultMap id="baseResult" type="LoginLog">
+        <id property="id" column="id" jdbcType="BIGINT" javaType="Long"/>
+        <result property="username" column="username" jdbcType="VARCHAR" javaType="String"/>
+        <result property="ip" column="ip" jdbcType="VARCHAR" javaType="String"/>
+        <result property="location" column="location" jdbcType="VARCHAR" javaType="String"/>
+        <result property="os" column="os" jdbcType="VARCHAR" javaType="String"/>
+        <result property="browser" column="browser" jdbcType="VARCHAR" javaType="String"/>
+        <result property="msg" column="msg" jdbcType="VARCHAR" javaType="String"/>
+        <result property="status" column="status" jdbcType="VARCHAR" javaType="String"/>
+        <result property="loginTime" column="login_time" jdbcType="TIMESTAMP" javaType="java.sql.Timestamp"/>
+    </resultMap>
     <sql id="baseQuery">
-        SELECT *
+        SELECT id,
+               username,
+               ip,
+               location,
+               os,
+               browser,
+               msg,
+               status,
+               login_time
         FROM login_log
     </sql>
     <insert id="insert" parameterType="LoginLog">
@@ -29,17 +48,17 @@
             <if test="status != null and status != ''">#{status},</if>
         </trim>
     </insert>
-    <select id="getLoginLogList" parameterType="LoginLog" resultType="LoginLog">
+    <select id="getLoginLogList" parameterType="LoginLog" resultMap="baseResult">
         <include refid="baseQuery"/>
         <where>
-            <if test="id  > 0">AND id =#{id},</if>
-            <if test="username != null and username != ''">AND username = #{username},</if>
-            <if test="ip != null and ip != ''">AND ip = #{ip},</if>
-            <if test="location != null and location != ''">AND location = #{location},</if>
+            <if test="id  > 0">AND id =#{id}</if>
+            <if test="username != null and username != ''">AND username = #{username}</if>
+            <if test="ip != null and ip != ''">AND ip = #{ip}</if>
+            <if test="location != null and location != ''">AND location = #{location}</if>
             <if test="os != null and os != ''">AND os = #{os},</if>
-            <if test="browser != null and browser != ''">AND browser = #{browser},</if>
-            <if test="msg != null and msg != ''">AND msg = #{msg},</if>
-            <if test="status != null and status != ''">AND status = #{status},</if>
+            <if test="browser != null and browser != ''">AND browser = #{browser}</if>
+            <if test="msg != null and msg != ''">AND msg = #{msg}</if>
+            <if test="status != null and status != ''">AND status = #{status}</if>
         </where>
         ORDER by id DESC
     </select>

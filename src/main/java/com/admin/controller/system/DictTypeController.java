@@ -2,6 +2,7 @@ package com.admin.controller.system;
 
 import com.admin.config.aspect.BusinessType;
 import com.admin.config.aspect.Log;
+import com.admin.controller.BaseController;
 import com.admin.entity.DictType;
 import com.admin.entity.Result;
 import com.admin.service.DictTypeService;
@@ -12,7 +13,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping(value = "/system/dict/type")
-public class DictTypeController {
+public class DictTypeController extends BaseController {
 
     final
     DictTypeService dictTypeService;
@@ -23,9 +24,9 @@ public class DictTypeController {
 
     @GetMapping(value = "/list")
     public Result getList() {
-        Result result = new Result();
-        result.setRows(dictTypeService.getDictTypeAll());
-        return result;
+        startPage();
+        List<?> list = dictTypeService.getDictTypeAll();
+        return getResultInfo(list);
     }
 
     @PostMapping

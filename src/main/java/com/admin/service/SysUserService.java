@@ -2,6 +2,7 @@ package com.admin.service;
 
 import com.admin.config.AsyncFactory;
 import com.admin.config.AsyncManager;
+import com.admin.config.exception.UserExistException;
 import com.admin.config.exception.UserNotExistException;
 import com.admin.config.shiro.JwtUtil;
 import com.admin.constant.Constants;
@@ -11,6 +12,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 @Service
@@ -47,6 +49,37 @@ public class SysUserService {
     public SysUser getSysUserByUsername(String username) {
         SysUser sysUser = new SysUser();
         sysUser.setUsername(username);
+        return sysUserMapper.getSysUser(sysUser);
+    }
+
+    public List<SysUser> getSysUserList(SysUser sysUser) {
+        return sysUserMapper.getSysUserList(sysUser);
+    }
+
+    public int deleteSysUserById(Long userId) {
+        return sysUserMapper.deleteSysUserById(userId);
+    }
+
+    public boolean isExist(String username) {
+        int s1 = sysUserMapper.checkExistByUsername(username);
+//        return sysUserMapper.checkExistByUsername(username) == 0;
+        log.error("s1 ==> {}", s1);
+        return s1 != 0;
+    }
+
+    public int addSysUser(SysUser sysUser) {
+//        boolean s1 = isExist(sysUser.getUsername());
+//        log.error("addSysUser ==> s1 ==> {}", s1);
+        if (!isExist(sysUser.getUsername())) {
+            return sysUserMapper.insert(sysUser);
+        } else {
+            throw new UserExistException();
+        }
+    }
+
+    public SysUser getSysUserByUserId(Long userId) {
+        SysUser sysUser = new SysUser();
+        sysUser.setId(userId);
         return sysUserMapper.getSysUser(sysUser);
     }
 }
