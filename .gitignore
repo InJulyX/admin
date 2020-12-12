@@ -4,7 +4,7 @@ target/
 !**/src/main/**/target/
 !**/src/test/**/target/
 .idea
-.mvn
+
 
 ### STS ###
 .apt_generated
@@ -16,10 +16,10 @@ target/
 .sts4-cache
 
 ### IntelliJ IDEA ###
-.idea
 *.iws
 *.iml
 *.ipr
+/.mvn/
 
 ### NetBeans ###
 /nbproject/private/
