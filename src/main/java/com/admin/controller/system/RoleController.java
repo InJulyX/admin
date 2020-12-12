@@ -35,7 +35,8 @@ public class RoleController extends BaseController {
 
     @PostMapping
     @Log(title = "角色管理", businessType = BusinessType.INSERT)
-    public void addRole() {
+    public void addRole(@RequestBody SysRole sysRole) {
+        sysRoleService.addSysRole(sysRole);
     }
 
     @PutMapping

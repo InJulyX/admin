@@ -8,6 +8,7 @@ public class StringUtils extends org.apache.commons.lang3.StringUtils {
     public static boolean isEmpty(String str) {
         return isNull(str) || NULLSTR.equals(str.trim());
     }
+    public static boolean isNotEmpty(String str){return !isEmpty(str);}
 
     public static boolean isNull(Object o) {
         return o == null;
@@ -51,5 +52,35 @@ public class StringUtils extends org.apache.commons.lang3.StringUtils {
 
     public static boolean isNotNull(Object o) {
         return !isNull(o);
+    }
+
+    public static String substring(final String str, int start, int end) {
+        if (str == null) {
+            return NULLSTR;
+        }
+
+        if (end < 0) {
+            end = str.length() + end;
+        }
+        if (start < 0) {
+            start = str.length() + start;
+        }
+
+        if (end > str.length()) {
+            end = str.length();
+        }
+
+        if (start > end) {
+            return NULLSTR;
+        }
+
+        if (start < 0) {
+            start = 0;
+        }
+        if (end < 0) {
+            end = 0;
+        }
+
+        return str.substring(start, end);
     }
 }

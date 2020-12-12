@@ -117,4 +117,39 @@
         </if>
         ORDER by sm.parent_id,sm.order_num
     </select>
+    <select id="getSysUserPermissionsByUserId" parameterType="Long" resultType="String">
+        SELECT DISTINCT sm.perms
+        FROM sys_menu sm
+                 LEFT JOIN sys_role_menu srm on sm.menu_id = srm.menu_id
+                 LEFT JOIN sys_user_role sur on srm.role_id = sur.role_id
+                 LEFT JOIN sys_role sr on sur.role_id = sr.id
+        WHERE sm.status = '0'
+          AND sr.status = '0'
+          AND sur.user_id = #{userId}
+    </select>
+    <select id="selectMenuTreeByUserId" parameterType="Long" resultMap="baseResult">
+        SELECT DISTINCT sm.menu_id,
+                        sm.parent_id,
+                        sm.menu_name,
+                        sm.path,
+                        sm.component,
+                        sm.visible,
+                        sm.status,
+                        sm.status,
+                        sm.is_frame,
+                        sm.is_cache,
+                        sm.menu_type,
+                        sm.icon,
+                        sm.order_num,
+                        sm.create_time
+        FROM sys_menu sm
+                 LEFT JOIN sys_role_menu srm on sm.menu_id = srm.menu_id
+                 LEFT JOIN sys_user_role sur on srm.role_id = sur.role_id
+                 LEFT JOIN sys_role sr on sur.role_id = sr.id
+                 LEFT JOIN sys_user su on sur.user_id = su.id
+        WHERE sm.menu_type in ('M', 'C')
+          AND sm.status = '0'
+          AND su.id = #{userId}
+        ORDER BY sm.parent_id, sm.order_num
+    </select>
 </mapper>

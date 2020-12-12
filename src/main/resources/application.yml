@@ -10,8 +10,8 @@ spring:
   datasource:
     username: ${DB_USERNAME:postgres}
     password: ${DB_PASSWORD:123456}
-    url: jdbc:postgresql://www.51ops.xyz:5432/admin
-    driver-class-name: org.postgresql.Driver
+    url: jdbc:log4jdbc:postgresql://${DB_HOST:localhost}:${DB_PORT:5432}/${DB_NAME:postgre}
+    driver-class-name: net.sf.log4jdbc.DriverSpy
   aop:
     auto: true
   jackson:
@@ -22,14 +22,23 @@ mybatis:
   type-aliases-package: com.admin.entity
   check-config-location: true
   executor-type: reuse
-
   configuration:
     map-underscore-to-camel-case: true
     cache-enabled: true
 logging:
+  pattern:
+    console: "%clr(%d{yyyy-MM-dd HH:mm:ss.SSS}){faint} %clr(%5p) %clr(%-25.25logger{25}){cyan} %clr(==>:){faint} %m%n"
   level:
-    root: info
-    com.admin.mapper: debug
+    root: error
+    com.admin:
+      config: info
+      mapper: debug
+    jdbc:
+      audit: off
+      sqlonly: off
+      resultSet: off
+      connection: off
+      sqltiming: off
 pagehelper:
   params: count=countSql
   reasonable: true

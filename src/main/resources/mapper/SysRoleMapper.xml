@@ -30,6 +30,7 @@
             <if test="updateBy != null and updateBy != ''">AND update_by = #{updateBy}</if>
             <if test="status != null and status != ''">AND status = #{status}</if>
         </where>
+        ORDER by id DESC
     </select>
     <select id="getSysRole" parameterType="SysRole" resultMap="baseResult">
         <include refid="baseQuery"/>
@@ -53,6 +54,7 @@
             <if test="updateBy != null and updateBy != ''">update_by,</if>
             <if test="status != null and status != ''">status,</if>
             <if test="menuCheckStrictly != null">menu_check_strictly,</if>
+            update_time
         </trim>
         VALUES
         <trim prefix="(" suffix=")" suffixOverrides=",">
@@ -64,6 +66,7 @@
             <if test="updateBy != null and updateBy != ''">#{updateBy},</if>
             <if test="status != null and status != ''">#{status},</if>
             <if test="menuCheckStrictly != null">#{menuCheckStrictly},</if>
+            CURRENT_TIMESTAMP
         </trim>
     </insert>
     <update id="update" parameterType="SysRole">
@@ -91,5 +94,21 @@
     <select id="getSysRoleIdsByUserId" parameterType="Long" resultType="Integer">
         SELECT sr.id
         FROM sys_role sr
+    </select>
+    <select id="getSysRolePermissionByUserId" parameterType="Long" resultMap="baseResult">
+        SELECT DISTINCT sr.id,
+                        sr.name,
+                        sr.remark,
+                        sr.key,
+                        sr.create_time,
+                        sr.update_time,
+                        sr.create_by,
+                        sr.update_by,
+                        sr.status,
+                        sr.menu_check_strictly
+        FROM sys_role sr
+                 LEFT JOIN sys_user_role sur on sr.id = sur.role_id
+                 LEFT JOIN sys_user su on sur.user_id = su.id
+        WHERE sur.user_id = #{userId}
     </select>
 </mapper>

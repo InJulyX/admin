@@ -12,7 +12,14 @@ public interface SysUserMapper {
     SysUser getSysUser(SysUser sysUser);
 
     List<SysUser> getSysUserList(SysUser sysUser);
+
     int deleteSysUserById(Long userId);
+
     int checkExistByUsername(String username);
+
     int insert(SysUser sysUser);
+
+    int update(SysUser sysUser);
+
+    SysUser getSysUserByUserId(Long userId);
 }

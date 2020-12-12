@@ -7,10 +7,7 @@ import com.admin.utils.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.LinkedList;
-import java.util.List;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Service
@@ -27,8 +24,11 @@ public class SysMenuService {
 
     public List<SysMenu> selectMenuTreeByUserId(Long userId) {
         List<SysMenu> menuList = new ArrayList<>();
-//        menuList = sysMenuMapper.selectMenuTreeByUserId(userId);
-        menuList = sysMenuMapper.selectMenuTreeAll();
+        if (SysUser.isAdmin(userId)) {
+            menuList = sysMenuMapper.selectMenuTreeAll();
+        } else {
+            menuList = sysMenuMapper.selectMenuTreeByUserId(userId);
+        }
         return getChildPerms(menuList, 0L);
     }
 
@@ -202,4 +202,14 @@ public class SysMenuService {
         return sysMenuMapper.getSysMenuListByRoleId(roleId, role.isMenuCheckStrictly());
     }
 
+    public Set<String> getUserPermissionsByUserId(Long userId) {
+        List<String> perms = sysMenuMapper.getSysUserPermissionsByUserId(userId);
+        Set<String> permsSet = new HashSet<>();
+        for (String perm : perms) {
+            if (StringUtils.isNotEmpty(perm)) {
+                permsSet.addAll(Arrays.asList(perm.trim().split(",")));
+            }
+        }
+        return permsSet;
+    }
 }

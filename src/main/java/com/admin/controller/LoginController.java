@@ -7,7 +7,9 @@ import com.admin.entity.RouterVO;
 import com.admin.entity.SysMenu;
 import com.admin.entity.SysUser;
 import com.admin.mapper.SysUserMapper;
+import com.admin.service.RolePermissionService;
 import com.admin.service.SysMenuService;
+import com.admin.service.SysRoleService;
 import com.admin.service.SysUserService;
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.subject.Subject;
@@ -31,11 +33,16 @@ public class LoginController {
     SysUserMapper sysUserMapper;
     final
     SysMenuService sysMenuService;
+    final
+    SysRoleService sysRoleService;
+    @Autowired
+    RolePermissionService rolePermissionService;
 
-    public LoginController(SysUserService sysUserService, SysUserMapper sysUserMapper, SysMenuService sysMenuService) {
+    public LoginController(SysUserService sysUserService, SysUserMapper sysUserMapper, SysMenuService sysMenuService, SysRoleService sysRoleService) {
         this.sysUserService = sysUserService;
         this.sysUserMapper = sysUserMapper;
         this.sysMenuService = sysMenuService;
+        this.sysRoleService = sysRoleService;
     }
 
     @PostMapping(value = "/login")
@@ -56,12 +63,17 @@ public class LoginController {
     }
 
     @GetMapping(value = "/getInfo")
-    public SysUser getInfo() {
+    public Map<String, Object> getInfo() {
         SysUser sysUser = new SysUser();
         String username = (String) SecurityUtils.getSubject().getPrincipal();
         sysUser.setUsername(username);
 
-        return sysUserMapper.getSysUser(sysUser);
+        SysUser s1 = sysUserMapper.getSysUser(sysUser);
+        Map<String, Object> result = new HashMap<>();
+        result.put("user", s1);
+        result.put("roles", sysRoleService.getSysUserRoleNames(s1));
+        result.put("permissions", rolePermissionService.getUserPermissions(s1));
+        return result;
     }
 
     @GetMapping(value = "/getRouters")

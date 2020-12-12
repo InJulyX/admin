@@ -62,7 +62,7 @@ public class LogAspect {
             }
             String className = joinPoint.getTarget().getClass().getName();
             String methodName = joinPoint.getSignature().getName();
-            operaLog.setMethod(className+"."+methodName+"()");
+            operaLog.setMethod(className + "." + methodName + "()");
             operaLog.setRequestMethod(ServletUtils.getRequest().getMethod());
             getControllerMethodDescription(joinPoint, controllerLog, operaLog);
             AsyncManager.me().execute(AsyncFactory.insertOperaLog(operaLog));
@@ -85,6 +85,7 @@ public class LogAspect {
     private void setRequestValue(JoinPoint joinPoint, OperaLog operaLog) throws Exception {
         String requestMethod = operaLog.getRequestMethod();
         if (HttpMethod.PUT.name().equals(requestMethod) || HttpMethod.POST.name().equals(requestMethod)) {
+            log.error(">>>> {}",joinPoint.getArgs());
             String params = argsArrayToString(joinPoint.getArgs());
             operaLog.setOperaParam(StringUtils.substring(params, 0, 2000));
         } else {

@@ -22,4 +22,5 @@ public interface SysRoleMapper {
     List<SysRole> getSysRoleAll();
 
     List<Integer> getSysRoleListByUserId(Long userId);
+    List<SysRole> getSysRolePermissionByUserId(Long userId);
 }

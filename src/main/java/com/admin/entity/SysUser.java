@@ -1,18 +1,25 @@
 package com.admin.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Data;
 
 import java.sql.Timestamp;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 @Data
 public class SysUser {
     private Long id;
     private String username;
+    @JsonIgnore
+    @JsonProperty
     private String password;
     private Boolean isActive;
-    private Set<String> roles;
+//    private Set<String> roles;
+    private List<SysRole> roles;
+    private Long[] roleIds;
     private String avatar;
     private String status;
     private Timestamp createTime;
@@ -22,13 +29,12 @@ public class SysUser {
     private String email;
     private String createBy;
     private String updateBy;
+    private String remark;
 
-    public SysUser() {
-        Set<String> roles = new HashSet<>();
-        roles.add("admin");
-        roles.add("root");
-        this.roles = roles;
+    public boolean isAdmin() {
+        return isAdmin(this.id);
     }
+
 
     public static boolean isAdmin(Long userId) {
         return userId != null && userId <= 10;

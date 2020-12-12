@@ -5,40 +5,84 @@
 <mapper namespace="com.admin.mapper.SysUserMapper">
     <resultMap id="baseResult" type="SysUser">
         <id property="id" column="id" jdbcType="BIGINT" javaType="Long"/>
+        <result property="username" column="username" jdbcType="VARCHAR" javaType="String"/>
+        <result property="avatar" column="avatar" jdbcType="VARCHAR" javaType="String"/>
         <result property="email" column="email" jdbcType="VARCHAR" javaType="String"/>
         <result property="nickName" column="nick_name" jdbcType="VARCHAR" javaType="String"/>
         <result property="phoneNumber" column="phone_number" jdbcType="VARCHAR" javaType="String"/>
         <result property="status" column="status" jdbcType="VARCHAR" javaType="String"/>
+        <result property="remark" column="remark" jdbcType="VARCHAR" javaType="String"/>
         <result property="createTime" column="create_time" javaType="java.sql.Timestamp" jdbcType="TIMESTAMP"/>
         <result property="updateTime" column="update_time" javaType="java.sql.Timestamp" jdbcType="TIMESTAMP"/>
+        <collection property="roles" javaType="java.util.List" resultMap="roleResult"/>
+    </resultMap>
+    <resultMap id="roleResult" type="SysRole">
+        <id property="id" column="role_id" jdbcType="BIGINT" javaType="Long"/>
+        <result property="name" column="name" jdbcType="VARCHAR" javaType="String"/>
+        <result property="key" column="key" jdbcType="VARCHAR" javaType="String"/>
+        <result property="status" column="status" jdbcType="VARCHAR" javaType="String"/>
     </resultMap>
     <sql id="baseQuery">
-        SELECT *
-        FROM sys_user
+        SELECT su.id,
+               su.username,
+               su.password,
+               su.is_active,
+               su.avatar,
+               su.status,
+               su.create_time,
+               su.update_time,
+               su.nick_name,
+               su.phone_number,
+               su.email,
+               su.remark,
+               sr.id     as role_id,
+               sr.name,
+               sr.key,
+               sr.status as role_status
+        FROM sys_user su
+                 LEFT JOIN sys_user_role sur on su.id = sur.user_id
+                 LEFT JOIN sys_role sr on sur.role_id = sr.id
     </sql>
-    <select id="getSysUser" resultType="SysUser">
+    <select id="getSysUser" resultMap="baseResult">
         <include refid="baseQuery"/>
         <where>
             <if test="id > 0">
-                AND id = #{id}
+                AND su.id = #{id}
             </if>
             <if test="username != null and username != ''">
-                AND username = #{username}
+                AND su.username = #{username}
             </if>
             <if test="password != null and password != ''">
-                AND password = #{password}
+                AND su.password = #{password}
             </if>
             <if test="isActive != null">
-                AND is_active = #{isActive}
+                AND su.is_active = #{isActive}
             </if>
         </where>
     </select>
-    <select id="getSysUserList" resultType="SysUser">
+    <select id="getSysUserByUserId" resultMap="baseResult" parameterType="Long">
         <include refid="baseQuery"/>
+        WHERE su.id =#{userId}
+    </select>
+    <select id="getSysUserList" parameterType="SysUser" resultMap="baseResult">
+        SELECT su.id,
+        su.username,
+        su.password,
+        su.is_active,
+        su.avatar,
+        su.status,
+        su.create_time,
+        su.update_time,
+        su.nick_name,
+        su.phone_number,
+        su.email,
+        su.remark
+        FROM sys_user su
         <where>
-            <if test="id != null and id > 0 ">AND id = #{id}</if>
+            <if test="username != null and username != ''">AND su.username = #{username}</if>
+            <if test="status != null and status != ''">AND status = #{status}</if>
         </where>
-        ORDER by id DESC
+        ORDER by su.id DESC
     </select>
     <delete id="deleteSysUserById">
         DELETE
@@ -65,17 +109,30 @@
             <if test="updateBy != null and updateBy != ''">update_by,</if>
         </trim>
         VALUES
-            <trim prefix="(" suffix=")" suffixOverrides=",">
-                <if test="username != null and username != ''">#{username},</if>
-                <if test="status != null and status != ''">#{status},</if>
-                <if test="nickName != null and nickName != ''">#{nickName},</if>
-                <if test="password != null and password != ''">#{password},</if>
-                <if test="isActive != null and isActive != ''">#{isActive},</if>
-                <if test="avatar != null and avatar != ''">#{avatar},</if>
-                <if test="phoneNumber != null and phoneNumber != ''">#{phoneNumber},</if>
-                <if test="email != null and email != ''">#{email},</if>
-                <if test="createBy != null and createBy != ''">#{createBy},</if>
-                <if test="updateBy != null and updateBy != ''">#{updateBy},</if>
-            </trim>
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="username != null and username != ''">#{username},</if>
+            <if test="status != null and status != ''">#{status},</if>
+            <if test="nickName != null and nickName != ''">#{nickName},</if>
+            <if test="password != null and password != ''">#{password},</if>
+            <if test="isActive != null and isActive != ''">#{isActive},</if>
+            <if test="avatar != null and avatar != ''">#{avatar},</if>
+            <if test="phoneNumber != null and phoneNumber != ''">#{phoneNumber},</if>
+            <if test="email != null and email != ''">#{email},</if>
+            <if test="createBy != null and createBy != ''">#{createBy},</if>
+            <if test="updateBy != null and updateBy != ''">#{updateBy},</if>
+        </trim>
     </insert>
+    <update id="update" parameterType="SysUser">
+        UPDATE sys_user
+        <set>
+            <if test="password != null and password != ''">password = #{password},</if>
+            <if test="nickName != null and nickName != ''">nick_name = #{nickName},</if>
+            <if test="phoneNumber != null and phoneNumber != ''">phone_number = #{phoneNumber},</if>
+            <if test="email != null and email != ''">email = #{email},</if>
+            <if test="status != null and status != ''">status = #{status},</if>
+            <if test="remark != null and remark != ''">remark = #{remark},</if>
+            update_time = CURRENT_TIMESTAMP
+        </set>
+        WHERE id = #{id}
+    </update>
 </mapper>

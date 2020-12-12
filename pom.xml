@@ -97,6 +97,13 @@
             <artifactId>UserAgentUtils</artifactId>
             <version>1.21</version>
         </dependency>
+        <!-- https://mvnrepository.com/artifact/com.googlecode.log4jdbc/log4jdbc -->
+        <dependency>
+            <groupId>com.googlecode.log4jdbc</groupId>
+            <artifactId>log4jdbc</artifactId>
+            <version>1.2</version>
+        </dependency>
+
 
 
         <!-- 阿里JSON解析器 -->
@@ -105,7 +112,6 @@
             <artifactId>fastjson</artifactId>
             <version>1.2.74</version>
         </dependency>
-
     </dependencies>
 
     <build>

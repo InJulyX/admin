@@ -2,14 +2,15 @@ package com.admin.service;
 
 import com.admin.entity.SysRole;
 import com.admin.entity.SysRoleMenu;
+import com.admin.entity.SysUser;
 import com.admin.mapper.SysRoleMapper;
 import com.admin.mapper.SysRoleMenuMapper;
+import com.admin.utils.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
 
 @Service
 public class SysRoleService {
@@ -68,5 +69,27 @@ public class SysRoleService {
 
     public List<Integer> getSysRoleListByUserId(Long userId) {
         return sysRoleMapper.getSysRoleListByUserId(userId);
+    }
+
+    public Set<String> getSysUserRoleNames(SysUser sysUser) {
+        Set<String> roles = new HashSet<>();
+        if (sysUser.isAdmin()) {
+            roles.add("admin");
+        } else {
+            roles.addAll(getSysRoleNamesByUserId(sysUser.getId()));
+        }
+
+        return roles;
+    }
+
+    public Set<String> getSysRoleNamesByUserId(Long userId) {
+        List<SysRole> perms = sysRoleMapper.getSysRolePermissionByUserId(userId);
+        Set<String> permsSet = new HashSet<>();
+        for (SysRole perm : perms) {
+            if (StringUtils.isNotNull(perm)) {
+                permsSet.addAll(Arrays.asList(perm.getKey().trim().split(",")));
+            }
+        }
+        return permsSet;
     }
 }

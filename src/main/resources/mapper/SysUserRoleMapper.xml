@@ -8,4 +8,16 @@
         FROM sys_user_role
         WHERE user_id = #{userId}
     </select>
+    <insert id="insertBatch">
+        INSERT INTO sys_user_role(user_id, role_id)
+        VALUES
+        <foreach item="item" collection="list" index="index" separator=",">
+            (#{item.userId},#{item.roleId})
+        </foreach>
+    </insert>
+    <delete id="deleteSysUserRoleByUserId" parameterType="Long">
+        DELETE
+        FROM sys_user_role
+        WHERE user_id = #{userId}
+    </delete>
 </mapper>

@@ -22,13 +22,15 @@ import java.util.Map;
 public class UserController extends BaseController {
     final
     SysUserService sysUserService;
-    @Autowired
+    final
     SysRoleService sysRoleService;
-    @Autowired
+    final
     SysUserRoleService sysUserRoleService;
 
-    public UserController(SysUserService sysUserService) {
+    public UserController(SysUserService sysUserService, SysRoleService sysRoleService, SysUserRoleService sysUserRoleService) {
         this.sysUserService = sysUserService;
+        this.sysRoleService = sysRoleService;
+        this.sysUserRoleService = sysUserRoleService;
     }
 
     @GetMapping(value = "/list")
@@ -53,8 +55,8 @@ public class UserController extends BaseController {
 
     @PutMapping
     @Log(title = "用户管理", businessType = BusinessType.UPDATE)
-    public void edit(@RequestBody SysUser sysUser) {
-
+    public Result edit(@RequestBody SysUser sysUser) {
+        return getResultInfo(sysUserService.updateSysUser(sysUser));
     }
 
     @GetMapping(value = {"/", "/{userId}"})
@@ -67,4 +69,11 @@ public class UserController extends BaseController {
         }
         return result;
     }
+
+    @PutMapping(value = "/resetPwd")
+    @Log(title = "用户管理", businessType = BusinessType.UPDATE)
+    public int resetPwd(@RequestBody SysUser sysUser) {
+        return sysUserService.updatePassword(sysUser);
+    }
+
 }
