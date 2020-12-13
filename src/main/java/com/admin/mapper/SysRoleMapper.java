@@ -23,4 +23,5 @@ public interface SysRoleMapper {
 
     List<Integer> getSysRoleListByUserId(Long userId);
     List<SysRole> getSysRolePermissionByUserId(Long userId);
+    int delete(SysRole sysRole);
 }

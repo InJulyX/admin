@@ -5,6 +5,7 @@ import com.admin.entity.SysRoleMenu;
 import com.admin.entity.SysUser;
 import com.admin.mapper.SysRoleMapper;
 import com.admin.mapper.SysRoleMenuMapper;
+import com.admin.mapper.SysUserRoleMapper;
 import com.admin.utils.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -19,10 +20,13 @@ public class SysRoleService {
     final
     SysRoleMenuMapper sysRoleMenuMapper;
 
+    final SysUserRoleMapper sysUserRoleMapper;
 
-    public SysRoleService(SysRoleMapper sysRoleMapper, SysRoleMenuMapper sysRoleMenuMapper) {
+
+    public SysRoleService(SysRoleMapper sysRoleMapper, SysRoleMenuMapper sysRoleMenuMapper, SysUserRoleMapper sysUserRoleMapper) {
         this.sysRoleMapper = sysRoleMapper;
         this.sysRoleMenuMapper = sysRoleMenuMapper;
+        this.sysUserRoleMapper = sysUserRoleMapper;
     }
 
     public List<SysRole> getSysRoleList(SysRole sysRole) {
@@ -74,7 +78,7 @@ public class SysRoleService {
     public Set<String> getSysUserRoleNames(SysUser sysUser) {
         Set<String> roles = new HashSet<>();
         if (sysUser.isAdmin()) {
-            roles.add("admin");
+            roles.add("sa");
         } else {
             roles.addAll(getSysRoleNamesByUserId(sysUser.getId()));
         }
@@ -91,5 +95,14 @@ public class SysRoleService {
             }
         }
         return permsSet;
+    }
+
+    @Transactional
+    public int deleteSysRoleByRoleId(Long roleId) {
+        SysRole sysRole = new SysRole();
+        sysRole.setId(roleId);
+        sysRoleMenuMapper.deleteSysRoleMenuByRoleId(roleId);
+        sysUserRoleMapper.deleteSysUserRoleByRoleId(roleId);
+        return sysRoleMapper.delete(sysRole);
     }
 }

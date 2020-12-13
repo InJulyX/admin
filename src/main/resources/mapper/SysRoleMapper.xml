@@ -29,6 +29,7 @@
             <if test="createBy != null and createBy != ''">AND create_by = #{createBy}</if>
             <if test="updateBy != null and updateBy != ''">AND update_by = #{updateBy}</if>
             <if test="status != null and status != ''">AND status = #{status}</if>
+            AND id > 0
         </where>
         ORDER by id DESC
     </select>
@@ -83,6 +84,16 @@
         </set>
         WHERE id = #{id}
     </update>
+    <delete id="delete" parameterType="SysRole">
+        DELETE FROM sys_role
+        <where>
+            <if test="id != null">AND id = #{id}</if>
+            <if test="name != null and name != ''">AND name = #{name}</if>
+            <if test="key != null and key != ''">AND key = #{key}</if>
+            OR 1= 0
+        </where>
+        OR 1= 0
+    </delete>
     <select id="getSysRoleAll" resultType="SysRole">
         SELECT DISTINCT sr.id,
                         sr.name,
@@ -90,6 +101,7 @@
                         sr.menu_check_strictly,
                         sr.status
         FROM sys_role sr
+        WHERE sr.id > 0
     </select>
     <select id="getSysRoleIdsByUserId" parameterType="Long" resultType="Integer">
         SELECT sr.id

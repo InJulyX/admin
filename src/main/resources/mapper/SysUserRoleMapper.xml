@@ -20,4 +20,16 @@
         FROM sys_user_role
         WHERE user_id = #{userId}
     </delete>
+    <select id="queryRoleSetByUsername" parameterType="String" resultType="String">
+        SELECT sr.key
+        FROM sys_role sr
+                 LEFT JOIN sys_user_role sur on sr.id = sur.role_id
+                 LEFT JOIN sys_user su on sur.user_id = su.id
+        WHERE su.username = #{username}
+    </select>
+    <delete id="deleteSysUserRoleByRoleId" parameterType="Long">
+        DELETE
+        FROM sys_user_role
+        WHERE role_id = #{roleId}
+    </delete>
 </mapper>

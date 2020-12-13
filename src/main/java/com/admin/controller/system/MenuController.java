@@ -19,16 +19,18 @@ import java.util.Map;
 @RestController
 @RequestMapping(value = "/system/menu")
 public class MenuController extends BaseController {
-    @Autowired
+    final
     SysUserService sysUserService;
-    @Autowired
+    final
     SysMenuService sysMenuService;
+
+    public MenuController(SysUserService sysUserService, SysMenuService sysMenuService) {
+        this.sysUserService = sysUserService;
+        this.sysMenuService = sysMenuService;
+    }
 
     @GetMapping(value = "/list")
     public List<SysMenu> list(SysMenu sysMenu) {
-//        String username = getUsername();
-//        SysUser sysUser = sysUserService.getSysUserByUsername(username);
-//        List<SysMenu> sysMenuList =sysMenuService.
         return sysMenuService.getSysMenuList(sysMenu);
     }
 
@@ -42,6 +44,11 @@ public class MenuController extends BaseController {
     @DeleteMapping(value = "/{menuId}")
     public void delete(@PathVariable("menuId") Long menuId) {
         sysMenuService.deleteByMenuId(menuId);
+    }
+
+    @GetMapping(value = "/{menuId}")
+    public SysMenu getInfo(@PathVariable Long menuId) {
+        return sysMenuService.getSysMenuByMenuId(menuId);
     }
 
     @GetMapping(value = "/treeSelect")

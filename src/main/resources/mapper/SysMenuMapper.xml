@@ -19,6 +19,10 @@
         <result property="perms" column="perms"/>
         <result property="icon" column="icon"/>
     </resultMap>
+    <sql id="baseQuery">
+        SELECT *
+        FROM sys_menu
+    </sql>
     <select id="selectMenuTreeAll" resultMap="baseResult">
         SELECT DISTINCT sm.menu_id,
                         sm.parent_id,
@@ -151,5 +155,11 @@
           AND sm.status = '0'
           AND su.id = #{userId}
         ORDER BY sm.parent_id, sm.order_num
+    </select>
+    <select id="getSysMenu" parameterType="SysMenu" resultMap="baseResult">
+        <include refid="baseQuery"/>
+        <where>
+            <if test="menuId != null">AND menu_id = #{menuId}</if>
+        </where>
     </select>
 </mapper>

@@ -12,6 +12,9 @@ import org.apache.shiro.spring.web.ShiroFilterFactoryBean;
 import org.apache.shiro.web.mgt.DefaultWebSecurityManager;
 import org.apache.shiro.web.mgt.DefaultWebSubjectFactory;
 import org.apache.shiro.web.session.mgt.DefaultWebSessionManager;
+import org.crazycake.shiro.RedisCacheManager;
+import org.crazycake.shiro.RedisManager;
+import org.crazycake.shiro.RedisSessionDAO;
 import org.springframework.aop.framework.autoproxy.DefaultAdvisorAutoProxyCreator;
 import org.springframework.beans.factory.config.MethodInvokingFactoryBean;
 import org.springframework.boot.web.servlet.FilterRegistrationBean;
@@ -126,5 +129,40 @@ public class ShiroConfig {
         return methodInvokingFactoryBean;
     }
 
-
+//    @Bean
+//    public RedisManager redisManager() {
+//        RedisManager redisManager=new RedisManager();
+//        redisManager.setDatabase(11);
+//        redisManager.setPassword("renXiaoHui1516");
+//        redisManager.setHost("www.51ops.xyz:6379");
+//        return redisManager;
+//    }
+//
+//    @Bean
+//    public DefaultWebSessionManager sessionManager() {
+//        DefaultWebSessionManager sessionManager = new DefaultWebSessionManager();
+//        sessionManager.setSessionDAO(redisSessionDAO());
+//        return sessionManager;
+//    }
+//
+//    @Bean
+//    public RedisSessionDAO redisSessionDAO() {
+//        RedisSessionDAO redisSessionDAO = new RedisSessionDAO();
+//        redisSessionDAO.setRedisManager(redisManager());
+//        return redisSessionDAO;
+//    }
+//
+//    public RedisCacheManager cacheManager() {
+//        RedisCacheManager redisCacheManager = new RedisCacheManager();
+//        redisCacheManager.setRedisManager(redisManager());
+//        return redisCacheManager;
+//    }
+//    @Bean
+//    public DefaultWebSecurityManager securityManager(){
+//        DefaultWebSecurityManager securityManager=new DefaultWebSecurityManager();
+//        securityManager.setRealm(new JwtRealm());
+//        securityManager.setSessionManager(sessionManager());
+//        securityManager.setCacheManager(cacheManager());
+//        return securityManager;
+//    }
 }

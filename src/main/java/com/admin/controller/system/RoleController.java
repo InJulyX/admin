@@ -33,6 +33,11 @@ public class RoleController extends BaseController {
         return sysRoleService.getSysRoleById(roleId);
     }
 
+    @DeleteMapping(value = "/{roleId}")
+    public Result deleteRole(@PathVariable Long roleId) {
+        return getResultInfo(sysRoleService.deleteSysRoleByRoleId(roleId));
+    }
+
     @PostMapping
     @Log(title = "角色管理", businessType = BusinessType.INSERT)
     public void addRole(@RequestBody SysRole sysRole) {

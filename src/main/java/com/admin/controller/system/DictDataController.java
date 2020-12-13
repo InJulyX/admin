@@ -33,7 +33,6 @@ public class DictDataController extends BaseController {
 
     @GetMapping(value = "/type/{dictType}")
     public List<DictData> getDataInfo(@PathVariable String dictType) {
-
         DictData s1 = new DictData();
         s1.setDictType(dictType);
         dictDataMapper.getDictDataList(s1);

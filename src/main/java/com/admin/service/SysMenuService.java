@@ -212,4 +212,10 @@ public class SysMenuService {
         }
         return permsSet;
     }
+
+    public SysMenu getSysMenuByMenuId(Long menuId) {
+        SysMenu sysMenu = new SysMenu();
+        sysMenu.setMenuId(menuId);
+        return sysMenuMapper.getSysMenu(sysMenu);
+    }
 }

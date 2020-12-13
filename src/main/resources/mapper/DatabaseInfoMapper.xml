@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.admin.mapper.DatabaseInfoViewMapper">
+    <resultMap id="baseResult" type="DatabaseInfoView">
+        <result property="database" column="database" jdbcType="VARCHAR"/>
+        <result property="schema" column="schema" jdbcType="VARCHAR"/>
+        <result property="tableName" column="table_name" jdbcType="VARCHAR"/>
+        <result property="tableSize" column="table_size" jdbcType="VARCHAR"/>
+        <result property="indexSize" column="index_size" jdbcType="VARCHAR"/>
+        <result property="totalSize" column="total_size" jdbcType="VARCHAR"/>
+        <result property="tableRow" column="table_row" jdbcType="BIGINT"/>
+        <result property="columnRow" column="column_row" jdbcType="BIGINT"/>
+        <result property="indexCount" column="index_count" jdbcType="INTEGER"/>
+        <result property="kind" column="kind" jdbcType="VARCHAR"/>
+        <result property="remark" column="remark" jdbcType="VARCHAR"/>
+        <result property="lastAnalyze" column="last_analyze" jdbcType="TIMESTAMP"/>
+    </resultMap>
+    <sql id="baseQuery">
+        SELECT database,
+               schema,
+               table_name,
+               table_size,
+               index_size,
+               total_size,
+               table_row,
+               column_row,
+               index_count,
+               remark,
+               kind,
+               last_analyze
+        from v_info
+    </sql>
+    <select id="getDatabaseInfoList" parameterType="DatabaseInfoView" resultMap="baseResult">
+        <include refid="baseQuery"/>
+        <where>
+            <if test="kind != null and kind != ''">AND kind = #{kind}</if>
+            <if test="database != null and database != ''">AND database = #{database}</if>
+            <if test="schema != null and schema != ''">AND schema = #{schema}</if>
+            <if test="tableName != null and tableName != ''">AND table_name = #{tableName}</if>
+        </where>
+        ORDER BY table_row DESC
+    </select>
+    <select id="vacuum" parameterType="String">
+        VACUUM ANALYZE ${tableName}
+    </select>
+    <select id="vacuumAll">
+        VACUUM ANALYZE
+    </select>
+</mapper>

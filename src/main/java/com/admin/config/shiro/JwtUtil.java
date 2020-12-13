@@ -12,7 +12,7 @@ public class JwtUtil {
     public static final String ACCOUNT = "username";
     public final static String CURRENT_TIME_MILLIS = "currentTimeMillis";
         public static final long REFRESH_TOKEN_EXPIRE_TIME = 7 * 24 * 60 * 60 * 1000L;
-//    public static final long REFRESH_TOKEN_EXPIRE_TIME = 30 * 60 * 1000L;
+//    public static final long REFRESH_TOKEN_EXPIRE_TIME = 10 * 1000L;
 
     public static final String SECRET_KEY = "123456789";
 

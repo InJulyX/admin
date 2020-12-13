@@ -24,7 +24,6 @@ public class JwtRealm extends AuthorizingRealm {
 
     @Override
     protected AuthorizationInfo doGetAuthorizationInfo(PrincipalCollection principalCollection) {
-        log.debug("com.admin.config.shiro.JwtRealm::doGetAuthorizationInfo");
         String username = principalCollection.toString();
         SimpleAuthorizationInfo authorizationInfo = new SimpleAuthorizationInfo();
         authorizationInfo.setRoles(sysUserService.queryRoles(username));

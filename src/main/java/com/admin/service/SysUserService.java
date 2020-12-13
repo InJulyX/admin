@@ -8,6 +8,7 @@ import com.admin.config.shiro.JwtUtil;
 import com.admin.constant.Constants;
 import com.admin.entity.SysUser;
 import com.admin.entity.SysUserRole;
+import com.admin.mapper.SysMenuMapper;
 import com.admin.mapper.SysUserMapper;
 import com.admin.mapper.SysUserRoleMapper;
 import com.admin.utils.StringUtils;
@@ -15,38 +16,60 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.DigestUtils;
 
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import java.lang.reflect.Array;
+import java.util.*;
 
 @Service
 @Slf4j
 public class SysUserService {
     final
     SysUserMapper sysUserMapper;
-    @Autowired
+    final
     SysUserRoleMapper sysUserRoleMapper;
+    final SysMenuMapper sysMenuMapper;
+    final SysMenuService sysMenuService;
 
-    public SysUserService(SysUserMapper sysUserMapper) {
+
+    public SysUserService(SysUserMapper sysUserMapper, SysUserRoleMapper sysUserRoleMapper, SysMenuMapper sysMenuMapper, SysMenuService sysMenuService) {
         this.sysUserMapper = sysUserMapper;
+        this.sysUserRoleMapper = sysUserRoleMapper;
+        this.sysMenuMapper = sysMenuMapper;
+        this.sysMenuService = sysMenuService;
     }
 
     public Set<String> queryRoles(String username) {
-        log.debug("com.admin.serviceSysUserService::queryRoles");
-        Set<String> roles = new HashSet<>();
-        roles.add("admin");
-        roles.add("root");
-        return roles;
+        if (SysUser.isAdmin(username)) {
+            Set<String> roles = new HashSet<>();
+            roles.add("sa");
+            return roles;
+        }
+        List<String> stringList = sysUserRoleMapper.queryRoleSetByUsername(username);
+        Set<String> rolesSet = new HashSet<>();
+        for (String role : stringList) {
+            if (StringUtils.isNotEmpty(role)) {
+                rolesSet.addAll(Arrays.asList(role.trim().split(",")));
+            }
+        }
+        return rolesSet;
     }
 
     public Set<String> queryPermissions(String username) {
-        return null;
+        Set<String> perms = new HashSet<>();
+
+        if (SysUser.isAdmin(username)) {
+            perms.add("*:*:*");
+        } else {
+            SysUser sysUser = getSysUserByUsername(username);
+            perms = sysMenuService.getUserPermissionsByUserId(sysUser.getId());
+        }
+        return perms;
     }
 
     public String login(SysUser sysUser) {
         SysUser user = sysUserMapper.getSysUser(sysUser);
+
         if (user == null) {
             AsyncManager.me().execute(AsyncFactory.insertLoginLog(sysUser.getUsername(), Constants.LOGIN_FAIL, "用户名或密码错误"));
             throw new UserNotExistException();
@@ -87,6 +110,7 @@ public class SysUserService {
     }
 
     void insertUserRole(SysUser sysUser) {
+        sysUser.setId(sysUserMapper.getSysUser(sysUser).getId());
         Long[] roles = sysUser.getRoleIds();
         Long userId = sysUser.getId();
         if (StringUtils.isNotNull(roles)) {

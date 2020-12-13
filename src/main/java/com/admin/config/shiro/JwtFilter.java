@@ -1,6 +1,6 @@
 package com.admin.config.shiro;
 
-import com.admin.config.exception.UnauthorizedException;
+import com.admin.config.exception.TokenExpiredException;
 import org.apache.shiro.web.filter.AccessControlFilter;
 
 import javax.servlet.ServletRequest;
@@ -37,14 +37,16 @@ public class JwtFilter extends AccessControlFilter {
         }
 //        throw new NullPointerException();
         onLoginFail(servletResponse);
+//        throw new TokenExpiredException();
         return false;
     }
 
     private void onLoginFail(ServletResponse response) throws IOException {
         HttpServletResponse httpServletResponse = (HttpServletResponse) response;
-        httpServletResponse.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+//        httpServletResponse.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
         httpServletResponse.setContentType("application/json;charset=utf-8");
-        httpServletResponse.getWriter().write("'o0o0o0o0o0o'");
-
+//        httpServletResponse.getWriter().write("'o0o0o0o0o0o'");
+        httpServletResponse.setStatus(HttpServletResponse.SC_OK);
+        httpServletResponse.getWriter().write("{\"code\": 401,\"msg\": \"认证失败，无法访问系统资源\"}");
     }
 }

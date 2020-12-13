@@ -23,7 +23,7 @@ public class DictTypeController extends BaseController {
     }
 
     @GetMapping(value = "/list")
-    public Result getList() {
+    public Result getList(DictType dictType) {
         startPage();
         List<?> list = dictTypeService.getDictTypeAll();
         return getResultInfo(list);

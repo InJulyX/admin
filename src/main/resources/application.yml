@@ -12,6 +12,12 @@ spring:
     password: ${DB_PASSWORD:123456}
     url: jdbc:log4jdbc:postgresql://${DB_HOST:localhost}:${DB_PORT:5432}/${DB_NAME:postgre}
     driver-class-name: net.sf.log4jdbc.DriverSpy
+  redis:
+    database: ${REDIS_DATABASE:0}
+    password: ${REDIS_PASSWORD:123456}
+    username: ${REDIS_USERNAME:redis}
+    host: ${REDIS_HOST:localhost}
+    port: ${REDIS_PORT:6379}
   aop:
     auto: true
   jackson:
@@ -39,6 +45,7 @@ logging:
       resultSet: off
       connection: off
       sqltiming: off
+    org.apache.shiro: debug
 pagehelper:
   params: count=countSql
   reasonable: true

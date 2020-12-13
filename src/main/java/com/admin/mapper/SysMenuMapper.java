@@ -22,6 +22,6 @@ public interface SysMenuMapper {
     List<SysMenu> getSysMenuListByUserId(SysMenu sysMenu);
 
     List<Integer> getSysMenuListByRoleId(Long roleId, boolean menuCheckStrictly);
-
+    SysMenu getSysMenu(SysMenu sysMenu);
     List<String> getSysUserPermissionsByUserId(Long userId);
 }

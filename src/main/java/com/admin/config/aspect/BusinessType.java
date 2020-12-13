@@ -50,4 +50,8 @@ public enum BusinessType {
      * 清空数据
      */
     CLEAN,
+    /**
+     * 更新统计信息
+     */
+    VACUUM,
 }
