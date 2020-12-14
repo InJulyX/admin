@@ -8,6 +8,11 @@
         FROM sys_role_menu
         WHERE role_id = #{roleId}
     </delete>
+    <delete id="deleteSysRoleMenuByMenuId" parameterType="Long">
+        DELETE
+        FROM sys_role_menu
+        WHERE menu_id = #{menuId}
+    </delete>
     <insert id="insertBatch">
         INSERT INTO sys_role_menu(role_id, menu_id)
         VALUES

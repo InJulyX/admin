@@ -10,6 +10,7 @@ import java.util.List;
 @Component
 public interface SysRoleMenuMapper {
     int deleteSysRoleMenuByRoleId(Long roleId);
+    int deleteSysRoleMenuByMenuId(Long roleId);
 
     int insertBatch(List<SysRoleMenu> sysRoleMenuList);
 }

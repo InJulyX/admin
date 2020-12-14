@@ -3,6 +3,7 @@ package com.admin.service;
 import com.admin.entity.*;
 import com.admin.mapper.SysMenuMapper;
 import com.admin.mapper.SysRoleMapper;
+import com.admin.mapper.SysRoleMenuMapper;
 import com.admin.utils.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -16,10 +17,12 @@ public class SysMenuService {
     SysMenuMapper sysMenuMapper;
     final
     SysRoleMapper sysRoleMapper;
+    final SysRoleMenuMapper sysRoleMenuMapper;
 
-    public SysMenuService(SysMenuMapper sysMenuMapper, SysRoleMapper sysRoleMapper) {
+    public SysMenuService(SysMenuMapper sysMenuMapper, SysRoleMapper sysRoleMapper, SysRoleMenuMapper sysRoleMenuMapper) {
         this.sysMenuMapper = sysMenuMapper;
         this.sysRoleMapper = sysRoleMapper;
+        this.sysRoleMenuMapper = sysRoleMenuMapper;
     }
 
     public List<SysMenu> selectMenuTreeByUserId(Long userId) {
@@ -168,6 +171,7 @@ public class SysMenuService {
     }
 
     public int deleteByMenuId(Long menuId) {
+        sysRoleMenuMapper.deleteSysRoleMenuByMenuId(menuId);
         return sysMenuMapper.deleteByMenuId(menuId);
     }
 

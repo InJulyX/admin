@@ -42,8 +42,8 @@ public class MenuController extends BaseController {
 
     @Log(title = "菜单管理", businessType = BusinessType.DELETE)
     @DeleteMapping(value = "/{menuId}")
-    public void delete(@PathVariable("menuId") Long menuId) {
-        sysMenuService.deleteByMenuId(menuId);
+    public Result delete(@PathVariable("menuId") Long menuId) {
+        return getResultInfo(sysMenuService.deleteByMenuId(menuId));
     }
 
     @GetMapping(value = "/{menuId}")

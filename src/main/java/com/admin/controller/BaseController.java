@@ -51,7 +51,7 @@ public class BaseController {
         return result;
     }
 
-    protected Result getResultInfo(int total) {
+    protected Result getResultInfo(long total) {
         Result result = new Result();
         result.setTotal(total);
         return result;

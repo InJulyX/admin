@@ -24,16 +24,5 @@ public class TestController {
         return 2;
     }
 
-    @RequestMapping(value = "/test/bot")
-    public void testBot() {
-        BotConfig botConfig = new BotConfig();
-        botConfig.setName("name");
-        botConfig.setCreateAt("createAt");
-        botConfig.setKey("key");
-        botConfig.setRemark("remark");
-        botConfig.setType("type");
-        botConfig.setStatus("status");
-        botConfigMapper.insert(botConfig);
-    }
 }
 
