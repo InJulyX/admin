@@ -49,7 +49,7 @@
         SELECT *
         FROM dict_data
     </select>
-    <insert id="insert" parameterType="dictData">
+    <insert id="insert" parameterType="DictData">
         INSERT INTO dict_data
         <trim prefix="(" suffix=")" suffixOverrides=",">
             <if test="dictCode > 0">dict_code,</if>
@@ -88,4 +88,18 @@
         FROM dict_data
         WHERE dict_code = #{dictCode}
     </delete>
+    <update id="update" parameterType="DictData">
+        UPDATE dict_data
+        <set>
+            <if test="updateBy != null and updateBy != ''">update_by = #{updateBy},</if>
+            <if test="dictSort!=null ">dict_sort = #{dictSort},</if>
+            <if test="dictValue!=null and dictValue != ''">dict_value=#{dictValue},</if>
+            <if test="status!=null and status != ''">status=#{status},</if>
+            <if test="remark!=null and remark != ''">remark=#{remark},</if>
+            <if test="dictLabel != null and dictLabel != ''">dict_label = #{dictLabel},</if>
+            update_time = CURRENT_TIMESTAMP
+        </set>
+        WHERE dict_code=#{dictCode}
+    </update>
+
 </mapper>

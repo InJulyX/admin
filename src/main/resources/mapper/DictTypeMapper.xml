@@ -66,4 +66,16 @@
             <if test="updateBy != null and updateBy != ''">AND update_by = #{updateBy}</if>
         </where>
     </select>
+    <update id="update" parameterType="DictType">
+        UPDATE dict_type
+        <set>
+            <if test="updateBy != null and updateBy != ''">update_by = #{updateBy},</if>
+            <if test="dictName != null and dictName != ''">dict_name=#{dictName},</if>
+            <if test="dictType != null and dictType != ''">dict_type=#{dictType},</if>
+            <if test="status != null and status != ''">status=#{status},</if>
+            <if test="remark != null and remark != ''">remark=#{remark},</if>
+            update_time=CURRENT_TIMESTAMP
+        </set>
+        WHERE dict_id = #{dictId}
+    </update>
 </mapper>

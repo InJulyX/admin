@@ -1,6 +1,6 @@
 package com.admin.mapper;
 
-import com.admin.entity.DictType;
+import com.admin.entity.database.DictType;
 import org.apache.ibatis.annotations.Mapper;
 import org.springframework.stereotype.Component;
 
@@ -20,4 +20,6 @@ public interface DictTypeMapper {
     DictType getDictType(DictType dictType);
 
     List<DictType> getDictTypeList(DictType dictType);
+
+    int update(DictType dictType);
 }

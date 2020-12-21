@@ -1,6 +1,6 @@
 package com.admin.mapper;
 
-import com.admin.entity.OperaLog;
+import com.admin.entity.database.OperaLog;
 import org.apache.ibatis.annotations.Mapper;
 import org.springframework.stereotype.Component;
 

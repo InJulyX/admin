@@ -1,8 +1,7 @@
 package com.admin.service;
 
-import com.admin.entity.DatabaseInfoView;
+import com.admin.entity.database.DatabaseInfoView;
 import com.admin.mapper.DatabaseInfoViewMapper;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;

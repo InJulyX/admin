@@ -1,8 +1,8 @@
 package com.admin.config;
 
 import com.admin.constant.Constants;
-import com.admin.entity.LoginLog;
-import com.admin.entity.OperaLog;
+import com.admin.entity.database.LoginLog;
+import com.admin.entity.database.OperaLog;
 import com.admin.service.LoginLogService;
 import com.admin.service.OperaLogService;
 import com.admin.utils.IpUtils;
@@ -15,7 +15,7 @@ import java.util.TimerTask;
 public class AsyncFactory {
     public static TimerTask insertLoginLog(final String username, final String status, final String message,
                                            final Object... args) {
-        final UserAgent userAgent = UserAgent.parseUserAgentString("Chrome");
+        final UserAgent userAgent = UserAgent.parseUserAgentString(ServletUtils.getRequest().getHeader("User-Agent"));
         final String ip = IpUtils.getIpAddr(ServletUtils.getRequest());
         return new TimerTask() {
             @Override

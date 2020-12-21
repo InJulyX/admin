@@ -1,6 +1,6 @@
 package com.admin.mapper;
 
-import com.admin.entity.DictData;
+import com.admin.entity.database.DictData;
 import org.apache.ibatis.annotations.Mapper;
 import org.springframework.stereotype.Component;
 
@@ -19,5 +19,8 @@ public interface DictDataMapper {
     List<DictData> getDictDataList(DictData dictData);
 
     int delete(Long dictCode);
+
     List<DictData> test();
+
+    int update(DictData dictData);
 }

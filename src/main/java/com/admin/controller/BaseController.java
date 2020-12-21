@@ -1,20 +1,13 @@
 package com.admin.controller;
 
-import com.admin.config.TableDataInfo;
-import com.admin.entity.PageDomain;
+import com.admin.entity.AjaxResult;
 import com.admin.entity.Result;
+import com.admin.entity.TableDataInfo;
 import com.admin.utils.ServletUtils;
-import com.admin.utils.StringUtils;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
-import org.apache.commons.lang3.time.DateUtils;
 import org.apache.shiro.SecurityUtils;
-import org.springframework.web.bind.WebDataBinder;
-import org.springframework.web.bind.annotation.InitBinder;
 
-import java.beans.PropertyEditorSupport;
-import java.text.ParseException;
-import java.util.Date;
 import java.util.List;
 
 public class BaseController {
@@ -55,5 +48,19 @@ public class BaseController {
         Result result = new Result();
         result.setTotal(total);
         return result;
+    }
+
+    @SuppressWarnings({"rawtypes", "unchecked"})
+    protected TableDataInfo getTableData(List<?> list) {
+        TableDataInfo rspData = new TableDataInfo();
+        rspData.setCode(200);
+        rspData.setMessage("操作成功");
+        rspData.setRows(list);
+        rspData.setTotal(new PageInfo(list).getTotal());
+        return rspData;
+    }
+
+    protected AjaxResult toAjax(int rows) {
+        return rows > 0 ? AjaxResult.success() : AjaxResult.error();
     }
 }

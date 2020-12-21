@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.admin.mapper.QuartzJobMapper">
+    <resultMap id="baseResult" type="QuartzJob">
+        <id column="jobId" property="job_id" jdbcType="BIGINT"/>
+        <result column="jobName" property="job_name" jdbcType="VARCHAR"/>
+        <result column="jobGroup" property="job_group" jdbcType="VARCHAR"/>
+        <result column="invokeTarget" property="invoke_target" jdbcType="VARCHAR"/>
+        <result column="cronExpression" property="cron_expression" jdbcType="VARCHAR"/>
+        <result column="misfirePolicy" property="misfire_policy" jdbcType="VARCHAR"/>
+        <result column="status" property="status" jdbcType="VARCHAR"/>
+    </resultMap>
+    <sql id="baseQuery">
+        SELECT job_id,
+               job_name,
+               job_group,
+               invoke_target,
+               cron_expression,
+               misfire_policy,
+               status
+        FROM quartz_job
+    </sql>
+    <select id="getQuartzJobList" parameterType="QuartzJob" resultMap="baseResult">
+        <include refid="baseQuery"/>
+        <where>
+            <if test="jobId != null ">AND job_id = #{jobId}</if>
+            <if test="jobName != null and jobName != ''">AND job_name = #{jobName}</if>
+            <if test="jobGroup != null and jobGroup != ''">AND job_group = #{jobGroup}</if>
+            <if test="invokeTarget != null and invokeTarget != ''">AND invoke_target = #{invokeTarget}</if>
+            <if test="cronExpression != null and cronExpression != ''">AND cron_expression = #{cronExpression}</if>
+            <if test="misfirePolicy != null and misfirePolicy != ''">AND misfire_policy = #{misfirePolicy}</if>
+            <if test="status != null and status != ''">AND status = #{status}</if>
+        </where>
+    </select>
+</mapper>

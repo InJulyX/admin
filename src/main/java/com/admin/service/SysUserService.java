@@ -6,24 +6,31 @@ import com.admin.config.exception.UserExistException;
 import com.admin.config.exception.UserNotExistException;
 import com.admin.config.shiro.JwtUtil;
 import com.admin.constant.Constants;
-import com.admin.entity.SysUser;
-import com.admin.entity.SysUserRole;
+import com.admin.entity.database.SysUser;
+import com.admin.entity.database.SysUserRole;
 import com.admin.mapper.SysMenuMapper;
 import com.admin.mapper.SysUserMapper;
 import com.admin.mapper.SysUserRoleMapper;
 import com.admin.utils.StringUtils;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.util.DigestUtils;
 
-import java.lang.reflect.Array;
+import javax.annotation.PostConstruct;
 import java.util.*;
 
 @Service
 @Slf4j
 public class SysUserService {
+    private final Logger logger = LoggerFactory.getLogger(getClass());
+
+    @PostConstruct
+    public void init() {
+        logger.info("sysUserServiceBean 初始化完成");
+    }
+
     final
     SysUserMapper sysUserMapper;
     final
@@ -42,7 +49,7 @@ public class SysUserService {
     public Set<String> queryRoles(String username) {
         if (SysUser.isAdmin(username)) {
             Set<String> roles = new HashSet<>();
-            roles.add("sa");
+            roles.add("system");
             return roles;
         }
         List<String> stringList = sysUserRoleMapper.queryRoleSetByUsername(username);
@@ -151,6 +158,10 @@ public class SysUserService {
         Long userId = sysUser.getId();
         sysUserRoleMapper.deleteSysUserRoleByUserId(userId);
         insertUserRole(sysUser);
+        return sysUserMapper.update(sysUser);
+    }
+
+    public int updateSysUserStatus(SysUser sysUser) {
         return sysUserMapper.update(sysUser);
     }
 }

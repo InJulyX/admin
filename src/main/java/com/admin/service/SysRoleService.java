@@ -1,13 +1,12 @@
 package com.admin.service;
 
-import com.admin.entity.SysRole;
-import com.admin.entity.SysRoleMenu;
-import com.admin.entity.SysUser;
+import com.admin.entity.database.SysRole;
+import com.admin.entity.database.SysRoleMenu;
+import com.admin.entity.database.SysUser;
 import com.admin.mapper.SysRoleMapper;
 import com.admin.mapper.SysRoleMenuMapper;
 import com.admin.mapper.SysUserRoleMapper;
 import com.admin.utils.StringUtils;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -41,7 +40,9 @@ public class SysRoleService {
 
     @Transactional
     public int addSysRole(SysRole sysRole) {
-        return sysRoleMapper.insert(sysRole);
+        sysRoleMapper.insert(sysRole);
+        sysRole.setId(sysRoleMapper.getSysRole(sysRole).getId());
+        return insertSysRoleMenu(sysRole);
     }
 
     @Transactional

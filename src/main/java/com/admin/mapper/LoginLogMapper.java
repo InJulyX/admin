@@ -1,6 +1,6 @@
 package com.admin.mapper;
 
-import com.admin.entity.LoginLog;
+import com.admin.entity.database.LoginLog;
 import org.apache.ibatis.annotations.Mapper;
 import org.springframework.stereotype.Component;
 

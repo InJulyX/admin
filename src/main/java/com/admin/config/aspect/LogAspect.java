@@ -2,7 +2,7 @@ package com.admin.config.aspect;
 
 import com.admin.config.AsyncFactory;
 import com.admin.config.AsyncManager;
-import com.admin.entity.OperaLog;
+import com.admin.entity.database.OperaLog;
 import com.admin.utils.IpUtils;
 import com.admin.utils.ServletUtils;
 import com.admin.utils.StringUtils;
@@ -85,7 +85,6 @@ public class LogAspect {
     private void setRequestValue(JoinPoint joinPoint, OperaLog operaLog) throws Exception {
         String requestMethod = operaLog.getRequestMethod();
         if (HttpMethod.PUT.name().equals(requestMethod) || HttpMethod.POST.name().equals(requestMethod)) {
-            log.error(">>>> {}",joinPoint.getArgs());
             String params = argsArrayToString(joinPoint.getArgs());
             operaLog.setOperaParam(StringUtils.substring(params, 0, 2000));
         } else {

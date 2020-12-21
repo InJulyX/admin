@@ -3,10 +3,11 @@ package com.admin.controller.system;
 import com.admin.config.aspect.BusinessType;
 import com.admin.config.aspect.Log;
 import com.admin.controller.BaseController;
-import com.admin.entity.Result;
-import com.admin.entity.SysRole;
+import com.admin.entity.AjaxResult;
+import com.admin.entity.TableDataInfo;
+import com.admin.entity.database.SysRole;
 import com.admin.service.SysRoleService;
-import org.springframework.beans.factory.annotation.Autowired;
+import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -21,32 +22,35 @@ public class RoleController extends BaseController {
         this.sysRoleService = sysRoleService;
     }
 
+    @RequiresPermissions("system:role:list")
     @GetMapping(value = "/list")
-    public Result getList(SysRole sysRole) {
+    public TableDataInfo getList(SysRole sysRole) {
         startPage();
         List<?> list = sysRoleService.getSysRoleList(sysRole);
-        return getResultInfo(list);
+        return getTableData(list);
     }
 
     @GetMapping(value = "/{roleId}")
-    public SysRole getInfo(@PathVariable Long roleId) {
-        return sysRoleService.getSysRoleById(roleId);
+    public AjaxResult getInfo(@PathVariable Long roleId) {
+        AjaxResult ajax = AjaxResult.success();
+        ajax.put("data", sysRoleService.getSysRoleById(roleId));
+        return ajax;
     }
 
     @DeleteMapping(value = "/{roleId}")
-    public Result deleteRole(@PathVariable Long roleId) {
-        return getResultInfo(sysRoleService.deleteSysRoleByRoleId(roleId));
+    public AjaxResult deleteRole(@PathVariable Long roleId) {
+        return toAjax(sysRoleService.deleteSysRoleByRoleId(roleId));
     }
 
     @PostMapping
     @Log(title = "角色管理", businessType = BusinessType.INSERT)
-    public void addRole(@RequestBody SysRole sysRole) {
-        sysRoleService.addSysRole(sysRole);
+    public AjaxResult addRole(@RequestBody SysRole sysRole) {
+        return toAjax(sysRoleService.addSysRole(sysRole));
     }
 
     @PutMapping
     @Log(title = "角色管理", businessType = BusinessType.UPDATE)
-    public void editRole(@RequestBody SysRole sysRole) {
-        sysRoleService.updateSysRole(sysRole);
+    public AjaxResult editRole(@RequestBody SysRole sysRole) {
+        return toAjax(sysRoleService.updateSysRole(sysRole));
     }
 }

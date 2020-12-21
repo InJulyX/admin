@@ -3,14 +3,15 @@ package com.admin.controller.monitor;
 import com.admin.config.aspect.BusinessType;
 import com.admin.config.aspect.Log;
 import com.admin.controller.BaseController;
-import com.admin.entity.DatabaseInfoView;
-import com.admin.entity.Result;
+import com.admin.entity.AjaxResult;
+import com.admin.entity.TableDataInfo;
+import com.admin.entity.database.DatabaseInfoView;
 import com.admin.service.DatabaseInfoViewService;
-import org.apache.shiro.authz.annotation.Logical;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
-import org.apache.shiro.authz.annotation.RequiresRoles;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
 
@@ -26,20 +27,21 @@ public class DatabaseController extends BaseController {
 
     @GetMapping(value = "/list")
     @RequiresPermissions("monitor:database:list")
-    public Result getList(DatabaseInfoView databaseInfoView) {
+    public TableDataInfo getList(DatabaseInfoView databaseInfoView) {
         startPage();
         List<?> list = databaseInfoViewService.getList(databaseInfoView);
-        return getResultInfo(list);
+        return getTableData(list);
     }
 
     @GetMapping(value = {"/vacuum", "/vacuum/{tableName}"})
     @Log(title = "数据库管理", businessType = BusinessType.VACUUM)
     @RequiresPermissions("monitor:database:vacuum")
-    public void vacuum(@PathVariable(required = false) String tableName) {
+    public AjaxResult vacuum(@PathVariable(required = false) String tableName) {
         if (tableName == null) {
             databaseInfoViewService.vacuumAll();
         } else {
             databaseInfoViewService.vacuum(tableName);
         }
+        return AjaxResult.success();
     }
 }

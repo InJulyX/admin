@@ -1,8 +1,7 @@
 package com.admin.service;
 
-import com.admin.entity.OperaLog;
+import com.admin.entity.database.OperaLog;
 import com.admin.mapper.OperaLogMapper;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;

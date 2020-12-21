@@ -162,4 +162,12 @@
             <if test="menuId != null">AND menu_id = #{menuId}</if>
         </where>
     </select>
+    <update id="update" parameterType="SysMenu">
+        UPDATE sys_menu
+        <set>
+            <if test="updateBy!=null and updateBy != ''">update_by = #{updateBy},</if>
+            update_time=CURRENT_TIMESTAMP
+        </set>
+        WHERE menu_id = #{menuId}
+    </update>
 </mapper>

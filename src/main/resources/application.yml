@@ -12,36 +12,6 @@ spring:
     password: ${DB_PASSWORD:123456}
     url: jdbc:postgresql://${DB_HOST:localhost}:${DB_PORT:5432}/${DB_NAME:postgre}
     driver-class-name: org.postgresql.Driver
-    type: com.alibaba.druid.pool.DruidDataSource
-    druid:
-      initial-size: 5
-      min-idle: 5
-      max-active: 20
-      max-wait: 60000
-      time-between-eviction-runs-millis: 60000
-      min-evictable-idle-time-millis: 300000
-      validation-query: SELECT 'X'
-      filter:
-        stat:
-          enabled: true
-          db-type: postgresql
-          log-slow-sql: true
-          slow-sql-millis: 1000
-        wall:
-          enabled: true
-          db-type: postgresql
-      stat-view-servlet:
-        reset-enable: false
-        #        login-password: renXiaoHui1516
-        #        login-username: druid
-        url-pattern: "/noAuth/druid/*"
-        enabled: true
-      pool-prepared-statements: true
-      max-open-prepared-statements: 50
-      name: admin
-      test-on-borrow: false
-      test-on-return: false
-      test-while-idle: true
   redis:
     database: ${REDIS_DATABASE:0}
     password: ${REDIS_PASSWORD:123456}
@@ -55,7 +25,7 @@ spring:
     time-zone: GMT+8
 mybatis:
   mapper-locations: classpath:mapper/**Mapper.xml
-  type-aliases-package: com.admin.entity
+  type-aliases-package: com.admin.entity.database
   check-config-location: true
   executor-type: reuse
   configuration:
@@ -65,8 +35,11 @@ logging:
   pattern:
     console: "%clr(%d{yyyy-MM-dd HH:mm:ss}){faint} %clr(%5p) %clr(%-25.25logger{25}){cyan} %clr(:){faint} %m%n"
   level:
-    root: error
+    root: info
+    org: error
+    com.alibaba: error
     com.admin.mapper: debug
+    com.admin.controller: debug
 pagehelper:
   params: count=countSql
   reasonable: true

@@ -3,10 +3,10 @@ package com.admin.controller.system;
 import com.admin.config.aspect.BusinessType;
 import com.admin.config.aspect.Log;
 import com.admin.controller.BaseController;
-import com.admin.entity.DictType;
-import com.admin.entity.Result;
+import com.admin.entity.AjaxResult;
+import com.admin.entity.TableDataInfo;
+import com.admin.entity.database.DictType;
 import com.admin.service.DictTypeService;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -23,26 +23,36 @@ public class DictTypeController extends BaseController {
     }
 
     @GetMapping(value = "/list")
-    public Result getList(DictType dictType) {
+    public TableDataInfo getList(DictType dictType) {
         startPage();
         List<?> list = dictTypeService.getDictTypeAll();
-        return getResultInfo(list);
+        return getTableData(list);
     }
 
     @PostMapping
     @Log(title = "字典管理", businessType = BusinessType.INSERT)
-    public void add(@RequestBody DictType dictType) {
-        dictTypeService.insert(dictType);
+    public AjaxResult add(@RequestBody DictType dictType) {
+        dictType.setCreateBy(getUsername());
+        return toAjax(dictTypeService.insert(dictType));
     }
 
     @DeleteMapping(value = "/{dictId}")
     @Log(title = "字典管理", businessType = BusinessType.DELETE)
-    public void delete(@PathVariable Long dictId) {
-        dictTypeService.deleteByDictId(dictId);
+    public AjaxResult delete(@PathVariable Long dictId) {
+        return toAjax(dictTypeService.deleteByDictId(dictId));
     }
 
     @GetMapping(value = "/{dictId}")
-    public DictType getInfo(@PathVariable Long dictId) {
-        return dictTypeService.getDictTypeByDictId(dictId);
+    public AjaxResult getInfo(@PathVariable Long dictId) {
+        AjaxResult ajax = AjaxResult.success();
+        ajax.put("data", dictTypeService.getDictTypeByDictId(dictId));
+        return ajax;
+    }
+
+    @PutMapping
+    @Log(title = "字典管理", businessType = BusinessType.UPDATE)
+    public AjaxResult edit(@RequestBody DictType dictType) {
+        dictType.setUpdateBy(getUsername());
+        return toAjax(dictTypeService.updateDictType(dictType));
     }
 }

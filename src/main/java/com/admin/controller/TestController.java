@@ -1,6 +1,5 @@
 package com.admin.controller;
 
-import com.admin.entity.BotConfig;
 import com.admin.mapper.BotConfigMapper;
 import org.apache.shiro.authz.annotation.RequiresRoles;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,5 +23,9 @@ public class TestController {
         return 2;
     }
 
+    @RequestMapping(value = "/bot/test")
+    public void botTest() {
+
+    }
 }
 

@@ -1,5 +1,6 @@
 package com.admin.entity;
 
+import com.admin.entity.database.SysMenu;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import lombok.Data;
 

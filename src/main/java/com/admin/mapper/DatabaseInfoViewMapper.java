@@ -1,6 +1,6 @@
 package com.admin.mapper;
 
-import com.admin.entity.DatabaseInfoView;
+import com.admin.entity.database.DatabaseInfoView;
 import org.apache.ibatis.annotations.Mapper;
 import org.springframework.stereotype.Component;
 

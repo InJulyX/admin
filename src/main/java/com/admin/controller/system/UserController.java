@@ -3,14 +3,13 @@ package com.admin.controller.system;
 import com.admin.config.aspect.BusinessType;
 import com.admin.config.aspect.Log;
 import com.admin.controller.BaseController;
-import com.admin.entity.Result;
-import com.admin.entity.SysRole;
-import com.admin.entity.SysUser;
-import com.admin.entity.SysUserRole;
+import com.admin.entity.AjaxResult;
+import com.admin.entity.TableDataInfo;
+import com.admin.entity.database.SysUser;
 import com.admin.service.SysRoleService;
 import com.admin.service.SysUserRoleService;
 import com.admin.service.SysUserService;
-import org.springframework.beans.factory.annotation.Autowired;
+import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.HashMap;
@@ -33,47 +32,61 @@ public class UserController extends BaseController {
         this.sysUserRoleService = sysUserRoleService;
     }
 
+    @RequiresPermissions("system:user:list")
     @GetMapping(value = "/list")
-    public Result getList(SysUser sysUser) {
+    public TableDataInfo getList(SysUser sysUser) {
         startPage();
-        List<?> list = sysUserService.getSysUserList(sysUser);
-        return getResultInfo(list);
+        List<SysUser> list = sysUserService.getSysUserList(sysUser);
+        return getTableData(list);
     }
 
+    @RequiresPermissions("system:user:delete")
     @DeleteMapping(value = "/{userId}")
     @Log(title = "用户管理", businessType = BusinessType.DELETE)
-    public Result remove(@PathVariable Long userId) {
-        int result = sysUserService.deleteSysUserById(userId);
-        return getResultInfo(result);
+    public AjaxResult remove(@PathVariable Long userId) {
+        return toAjax(sysUserService.deleteSysUserById(userId));
     }
 
+    @RequiresPermissions("system:user:add")
     @PostMapping
     @Log(title = "用户管理", businessType = BusinessType.INSERT)
-    public Result add(@RequestBody SysUser sysUser) {
-        return getResultInfo(sysUserService.addSysUser(sysUser));
+    public AjaxResult add(@RequestBody SysUser sysUser) {
+        return toAjax(sysUserService.addSysUser(sysUser));
     }
 
+    @RequiresPermissions("system:user:edit")
     @PutMapping
     @Log(title = "用户管理", businessType = BusinessType.UPDATE)
-    public Result edit(@RequestBody SysUser sysUser) {
-        return getResultInfo(sysUserService.updateSysUser(sysUser));
+    public AjaxResult edit(@RequestBody SysUser sysUser) {
+        return toAjax(sysUserService.updateSysUser(sysUser));
     }
 
     @GetMapping(value = {"/", "/{userId}"})
-    public Map<String, Object> getInfo(@PathVariable(required = false) Long userId) {
+    public AjaxResult getInfo(@PathVariable(required = false) Long userId) {
         Map<String, Object> result = new HashMap<>();
         result.put("roles", sysRoleService.getSysRoleAll());
         if (userId != null) {
             result.put("user", sysUserService.getSysUserByUserId(userId));
             result.put("roleIds", sysUserRoleService.getSysRoleIdsByUserId(userId));
         }
-        return result;
+        AjaxResult ajax = AjaxResult.success();
+        ajax.put("data", result);
+        return ajax;
     }
 
+    @RequiresPermissions("system:user:edit")
     @PutMapping(value = "/resetPwd")
     @Log(title = "用户管理", businessType = BusinessType.UPDATE)
-    public int resetPwd(@RequestBody SysUser sysUser) {
-        return sysUserService.updatePassword(sysUser);
+    public AjaxResult resetPwd(@RequestBody SysUser sysUser) {
+        return toAjax(sysUserService.updatePassword(sysUser));
+    }
+
+    @RequiresPermissions("system:user:edit")
+    @PutMapping(value = "/changeStatus")
+    @Log(title = "用户管理", businessType = BusinessType.UPDATE)
+    public AjaxResult changeStatus(@RequestBody SysUser sysUser) {
+        sysUser.setUpdateBy(getUsername());
+        return toAjax(sysUserService.updateSysUserStatus(sysUser));
     }
 
 }

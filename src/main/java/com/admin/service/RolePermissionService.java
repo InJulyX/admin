@@ -1,6 +1,6 @@
 package com.admin.service;
 
-import com.admin.entity.SysUser;
+import com.admin.entity.database.SysUser;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 

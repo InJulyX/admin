@@ -1,9 +1,8 @@
 package com.admin.service;
 
-import com.admin.entity.DictData;
+import com.admin.entity.database.DictData;
 import com.admin.mapper.DictDataMapper;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -22,7 +21,7 @@ public class DictDataService {
         DictData dictData = new DictData();
         dictData.setDictType(dictType);
         log.error(dictData.toString());
-        List<DictData> s11 =dictDataMapper.getDictDataList(dictData);
+        List<DictData> s11 = dictDataMapper.getDictDataList(dictData);
         return s11;
     }
 
@@ -42,5 +41,9 @@ public class DictDataService {
         DictData dictData = new DictData();
         dictData.setDictCode(dictCode);
         return dictDataMapper.getDictData(dictData);
+    }
+
+    public int updateDictData(DictData dictData) {
+        return dictDataMapper.update(dictData);
     }
 }

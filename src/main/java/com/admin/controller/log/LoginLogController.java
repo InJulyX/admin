@@ -1,10 +1,10 @@
 package com.admin.controller.log;
 
 import com.admin.controller.BaseController;
-import com.admin.entity.LoginLog;
-import com.admin.entity.Result;
+import com.admin.entity.TableDataInfo;
+import com.admin.entity.database.LoginLog;
 import com.admin.service.LoginLogService;
-import org.springframework.beans.factory.annotation.Autowired;
+import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -22,11 +22,11 @@ public class LoginLogController extends BaseController {
         this.loginLogService = loginLogService;
     }
 
+    @RequiresPermissions("log:loginLog:list")
     @GetMapping(value = "/list")
-    public Result getList(LoginLog loginLog) {
+    public TableDataInfo getList(LoginLog loginLog) {
         startPage();
         List<?> list = loginLogService.getList(loginLog);
-
-        return getResultInfo(list);
+        return getTableData(list);
     }
 }

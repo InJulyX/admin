@@ -1,11 +1,15 @@
 package com.admin.service;
 
-import com.admin.entity.*;
+import com.admin.entity.MetaVO;
+import com.admin.entity.RouterVO;
+import com.admin.entity.TreeSelect;
+import com.admin.entity.database.SysMenu;
+import com.admin.entity.database.SysRole;
+import com.admin.entity.database.SysUser;
 import com.admin.mapper.SysMenuMapper;
 import com.admin.mapper.SysRoleMapper;
 import com.admin.mapper.SysRoleMenuMapper;
 import com.admin.utils.StringUtils;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.*;
@@ -221,5 +225,9 @@ public class SysMenuService {
         SysMenu sysMenu = new SysMenu();
         sysMenu.setMenuId(menuId);
         return sysMenuMapper.getSysMenu(sysMenu);
+    }
+
+    public int updateSysMenu(SysMenu sysMenu) {
+        return sysMenuMapper.update(sysMenu);
     }
 }

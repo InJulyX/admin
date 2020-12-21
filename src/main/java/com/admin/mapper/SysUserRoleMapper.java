@@ -1,11 +1,10 @@
 package com.admin.mapper;
 
-import com.admin.entity.SysUserRole;
+import com.admin.entity.database.SysUserRole;
 import org.apache.ibatis.annotations.Mapper;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
-import java.util.Set;
 
 @Mapper
 @Component
